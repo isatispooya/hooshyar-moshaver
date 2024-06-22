@@ -24,7 +24,7 @@ export default function ThemeProvider({ children }) {
     []
   );
 
-  const theme = createTheme(memoizedValue);
+  const theme = createTheme(memoizedValue,{direction: 'rtl'});
 
   theme.components = overrides(theme);
 
