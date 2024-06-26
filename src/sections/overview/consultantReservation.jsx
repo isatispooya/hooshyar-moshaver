@@ -1,15 +1,21 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
 
+// eslint-disable-next-line import/no-unresolved
 import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
-import QuizComponent from './question';
 
-const steps = ['صفحه 1', 'صفحه 2', 'صفحه 3', 'صفحه 4'];
+import ReservationType from './reservationType';
+import ReservationTime from './reservationTime';
+import ChoosingConsultant from './choosingConsultant';
+import ReservationInvoice from './reservationInvoice';
+import Reservationquestion from './reservationquestion';
+
+const steps = ['سوالات', 'نوع مشاوره', 'انتخاب مشاور', 'انتخاب تاریخ وزمان', 'پیش فاکتور'];
 
 export default function ConfirmationModal() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -72,7 +78,9 @@ export default function ConfirmationModal() {
       </Stepper>
       {activeStep === steps.length ? (
         <>
-          <Typography sx={{ mt: 2, mb: 1 }}>تمام مراحل به پایان رسیده‌اند - شما به پایان رسیده‌اید</Typography>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            تمام مراحل به پایان رسیده‌اند - شما به پایان رسیده‌اید
+          </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>بازنشانی</Button>
@@ -80,33 +88,109 @@ export default function ConfirmationModal() {
         </>
       ) : (
         <>
-
-
-
-
-        
           <Typography sx={{ mt: 2, mb: 1 }}>
-            {activeStep === 0 ? <QuizComponent/> : activeStep === 1 ? 'خوبی؟' : activeStep === 2 ? 'مرسی' : 'نوکرم'}
+            {activeStep === 0 ? (
+              <Reservationquestion />
+            ) : activeStep === 1 ? (
+              <ReservationType />
+            ) : activeStep === 2 ? (
+              <ChoosingConsultant
+                List={[
+                  {
+                    id: '1',
+                    avatar: 'https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg',
+                    name: '  اقای دکتر محمد زمانی ',
+                    type: 'حضوری',
+                    expertise: 'متخصص مشاوره بورس وکارشناس تحلیل تکنیکال',
+                    star: 5,
+                  },
+                  {
+                    id: '2',
+                    avatar:
+                      'https://moshavergroup.com/uploads/2018/01/%D9%85%D8%B4%D8%A7%D9%88%D8%B1%D9%87-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86.jpg',
+                    name: 'مشاوره با خانم دکتر سارا اسدی',
+                    type: 'تلفنی-حضوری',
+                    expertise: 'کارشناس بازارهای مالی',
+                    star: 2,
+                  },
+                  {
+                    id: '3',
+                    avatar:
+                      'https://moshavergroup.com/uploads/2018/01/Support-call-us-e1410682733686.jpg126587.jpg',
+                    name: 'مشاوره با اقای دکتر رضا مقدم ',
+                    type: 'تلفنی-حضوری',
+                    expertise: 'کارشناس ارز دیجیتال | متاورس | NFT',
+                    star: 3,
+                  },
+                  {
+                    id: '4',
+                    avatar:
+                      'https://yourkilid.com/wp-content/uploads/2021/11/client-centric-call-centres-for-medical-aids-a-must.jpg',
+                    name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
+                    type: 'حضوری',
+                    expertise: 'کارشناس تحلیل بنیادی',
+                    star: 1,
+                  },
+                  {
+                    id: '5',
+                    avatar: 'https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg',
+                    name: '  اقای دکتر محمد زمانی ',
+                    type: 'حضوری',
+                    expertise: 'متخصص مشاوره بورس وکارشناس تحلیل تکنیکال',
+                    star: 5,
+                  },
+                  {
+                    id: '6',
+                    avatar:
+                      'https://moshavergroup.com/uploads/2018/01/%D9%85%D8%B4%D8%A7%D9%88%D8%B1%D9%87-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86.jpg',
+                    name: 'مشاوره با خانم دکتر سارا اسدی',
+                    type: 'تلفنی-حضوری',
+                    expertise: 'کارشناس بازارهای مالی',
+                    star: 5,
+                  },
+                  {
+                    id: '7',
+                    avatar:
+                      'https://moshavergroup.com/uploads/2018/01/Support-call-us-e1410682733686.jpg126587.jpg',
+                    name: 'مشاوره با اقای دکتر رضا مقدم ',
+                    type: 'تلفنی-حضوری',
+                    expertise: 'کارشناس ارز دیجیتال | متاورس | NFT',
+                    star: 3,
+                  },
+                  {
+                    id: '8',
+                    avatar:
+                      'https://yourkilid.com/wp-content/uploads/2021/11/client-centric-call-centres-for-medical-aids-a-must.jpg',
+                    name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
+                    type: 'حضوری',
+                    expertise: 'کارشناس تحلیل بنیادی',
+                    star: 1,
+                  },
+                ]}
+              />
+            ) : activeStep === 3 ? (
+              <ReservationTime />
+            ) : (
+              <ReservationInvoice/>
+            )}
           </Typography>
 
-
-
-
-
-
-
-
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+            <Button
+              variant="contained"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
               بازگشت
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              <Button onClick={handleSkip} sx={{ mr: 1 }}>
                 رد کردن
               </Button>
             )}
-            <Button onClick={handleNext}>
+            <Button variant="contained" onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'پایان' : 'بعدی'}
             </Button>
           </Box>

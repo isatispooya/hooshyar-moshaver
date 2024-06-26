@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Typography, Divider } from '@mui/material';
 
-const QuizComponent = () => {
+import { Divider, Typography } from '@mui/material';
+
+const Reservationquestion = () => {
   const questions = [
     {
       num: 1,
@@ -116,7 +117,7 @@ const styles = {
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#e3f2fd',
+    backgroundColor: '#e1f5fe',
     borderRadius: '5px',
     transition: 'background-color 0.3s ease',
   },
@@ -125,4 +126,4 @@ const styles = {
   },
 };
 
-export default QuizComponent;
+export default Reservationquestion;
