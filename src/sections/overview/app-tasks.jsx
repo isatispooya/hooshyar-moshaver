@@ -86,6 +86,7 @@ AnalyticsTasks.propTypes = {
 function TaskItem({ task, checked, onDelete }) {
   const [open, setOpen] = useState(null);
 
+
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -99,9 +100,9 @@ function TaskItem({ task, checked, onDelete }) {
     console.info('SHARE', task.id);
   };
 
-  const handleEdit = () => {
+  const handleView = () => {
     handleCloseMenu();
-    console.info('EDIT', task.id);
+    console.info('view', task.id);
   };
 
   return (
@@ -195,7 +196,7 @@ function TaskItem({ task, checked, onDelete }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleEdit}>
+        <MenuItem onClick={handleView}>
           <Iconify icon="gravity-ui:chevrons-expand-up-right" sx={{ mr: 2 }} />
           مشاهده
         </MenuItem>

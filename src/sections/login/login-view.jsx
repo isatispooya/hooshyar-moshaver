@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,30 +14,56 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 
+import { Onrun } from 'src/api/onRun';
 import { bgGradient } from 'src/theme/css';
-
-// ----------------------------------------------------------------------
 
 export default function LoginView() {
   const theme = useTheme();
   const [mobileNumber, setMobileNumber] = useState('');
   const [captchaLogin, setCaptchaLogin] = useState('');
-  const [SecondForm, setSecondForm] = useState(false);
-
+  const [codeNumber, setCodeNumber] = useState('');
   const navigate = useNavigate();
+  const [isLoadingCaptcha, setIsLoadingCaptcha] = useState(true);
+  const [captchaData, setCaptchaData] = useState(null);
+  const [codeData, setcodeData] = useState(null);
 
-  const handleClick = () => {
-    setSecondForm(true);
+  const [secondForm, setSecondForm] = useState(false);
+
+  const fetchCaptcha = async () => {
+    setIsLoadingCaptcha(true);
+    try {
+      const response = await axios.get(`${Onrun}/api/captcha/`);
+      setCaptchaData(response.data);
+    } catch (error) {
+      console.error('Error fetching captcha:', error);
+      toast.error('Failed to load captcha');
+    } finally {
+      setIsLoadingCaptcha(false);
+    }
   };
 
-  const loginClick = async () => {
+  const handleClick = async() => {
+    try {
+      const response = await axios.post(`${Onrun}/api/otp/`);
+      console.log(response);
+    } catch (error) {
+      console.error('Error fetching captcha:', error);
+    } finally {
+      setIsLoadingCaptcha(false);
+    }
+  };
+
+  const loginClick = () => {
     console.log('loginClick');
-    navigate('/', { replace: true });
   };
+
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
 
   const renderForm = (
     <>
-      {!SecondForm && (
+      {!secondForm && (
         <>
           <Stack spacing={3}>
             <TextField
@@ -42,65 +71,69 @@ export default function LoginView() {
               label="شماره موبایل"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
-              fullWidth
-              variant="outlined"
             />
             <TextField
+            style={{marginBottom:'20px'}}
               name="captcha"
               label="کپچا"
               value={captchaLogin}
               onChange={(e) => setCaptchaLogin(e.target.value)}
-              fullWidth
-              variant="outlined"
             />
           </Stack>
 
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-            <Skeleton variant="rounded" width={210} height={60} />
-          </Box>
+          {isLoadingCaptcha ? (
+            <Skeleton variant="rounded" width={330} height={60} />
+          ) : (
+            <Stack spacing={3}>
+              <Button onClick={fetchCaptcha}>
+                <img src={`data:image/png;base64,${captchaData?.image}`} alt="captcha" />
+              </Button>
+            </Stack>
+          )}
 
-          <Stack spacing={3} sx={{ mt: 2 }}>
-            <Button onClick={() => console.log('capcha')}>
-              <img alt="captcha" />
-            </Button>
-          </Stack>
-
-          <Box sx={{ mt: 3 }}>
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <LoadingButton
               fullWidth
               size="large"
               type="submit"
               variant="contained"
-              color="primary"
+              color="inherit"
               onClick={handleClick}
-              sx={{ borderRadius: '10px', py: 1.5 }}
             >
               تایید
             </LoadingButton>
-          </Box>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </div>
         </>
       )}
-
-      {SecondForm && (
+      {secondForm && (
         <>
           <Stack spacing={3}>
-            <TextField value={mobileNumber} disabled name="mobileNumber" fullWidth variant="outlined" />
-            <TextField name="Code" label="کد تایید" fullWidth variant="outlined" />
+            <TextField value={mobileNumber} disabled name="mobileNumber" />
+            <TextField name="Code" label="کد تایید" onChange={(e) => setCodeNumber(e.target.value)} />
           </Stack>
 
-          <Box sx={{ mt: 3 }}>
+          <div style={{ marginTop: '20px' }}>
             <LoadingButton
               fullWidth
               size="large"
               type="submit"
               variant="contained"
-              color="primary"
+              color="inherit"
               onClick={loginClick}
-              sx={{ borderRadius: '10px', py: 1.5 }}
             >
               ورود
             </LoadingButton>
-          </Box>
+          </div>
         </>
       )}
     </>
@@ -113,33 +146,28 @@ export default function LoginView() {
           color: alpha(theme.palette.background.default, 0.9),
           imgUrl: '/assets/background/overlay_4.jpg',
         }),
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: 1,
       }}
     >
-      <Card
-        sx={{
-          p: 5,
-          width: '100%',
-          maxWidth: 420,
-          borderRadius: '12px',
-          boxShadow: theme.shadows[10],
-        }}
-      >
-        <Typography variant="h4" align="center" gutterBottom>
-          صفحه ورود
-        </Typography>
+      <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+        <Card
+          sx={{
+            p: 5,
+            width: 1,
+            maxWidth: 420,
+          }}
+        >
+          <Typography variant="h4">صفحه ورود</Typography>
 
-        <Divider sx={{ my: 3 }}>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            ورود
-          </Typography>
-        </Divider>
+          <Divider sx={{ my: 3 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              ورود
+            </Typography>
+          </Divider>
 
-        {renderForm}
-      </Card>
+          {renderForm}
+        </Card>
+      </Stack>
     </Box>
   );
 }

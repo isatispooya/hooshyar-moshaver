@@ -191,7 +191,7 @@ export default function ConfirmationModal() {
               </Button>
             )}
             <Button variant="contained" onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'پایان' : 'بعدی'}
+              {activeStep === steps.length - 1 ? 'پرداخت' : 'بعدی'}
             </Button>
           </Box>
         </>
