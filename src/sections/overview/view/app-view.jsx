@@ -52,10 +52,10 @@ export default function AppView() {
           <AppTasks
             title="Tasks"
             list={[
-              { id: '1', name: 'مشاوره با اقای دکتر محمد زمانی ' ,type:'تلفنی ', date:'12/6/04',status:'فعال'},
-              { id: '3', name: 'مشاوره با خانم دکتر سارا اسدی' ,type:'حضوری', date:'12/9/19',status:'اتمام'},
-              { id: '4', name: 'مشاوره با اقای دکتر رضا مقدم ', type:'حضوری ', date:'12/10/30',status:'فعال'},
-              { id: '5', name: 'مشاوره با خانم دکتر مریم امیرجلیلی',type:'تلفنی ', date:'12/12/5',status:'اتمام' },
+              { id: '1', name: 'مشاوره با اقای دکتر محمد زمانی ' ,type:'تلفنی ', date:'12/6/04',status:true},
+              { id: '3', name: 'مشاوره با خانم دکتر سارا اسدی' ,type:'حضوری', date:'12/9/19',status:false},
+              { id: '4', name: 'مشاوره با اقای دکتر رضا مقدم ', type:'حضوری ', date:'12/10/30',status:true},
+              { id: '5', name: 'مشاوره با خانم دکتر مریم امیرجلیلی',type:'تلفنی ', date:'12/12/5',status:false },
             ]}
           />
         </Grid>

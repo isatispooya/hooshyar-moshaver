@@ -112,6 +112,8 @@ export default function ConfirmationModal() {
                     type: 'تلفنی-حضوری',
                     expertise: 'کارشناس بازارهای مالی',
                     star: 2,
+                                        status:false
+
                   },
                   {
                     id: '3',
