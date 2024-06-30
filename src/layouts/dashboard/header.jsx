@@ -1,71 +1,49 @@
-import PropTypes from 'prop-types';
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import { Avatar } from '@mui/material';
-import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { useTheme } from '@mui/material/styles';
+import { Avatar, Button, Typography } from '@mui/material';
 
-import { useResponsive } from 'src/hooks/use-responsive';
+import { setCookieValue } from 'src/utils/cookie';
 
-import { bgBlur } from 'src/theme/css';
+import Iconify from 'src/components/iconify';
 
-// import Searchbar from './common/searchbar';
-import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 
+export default function Header() {
+  const [open, setOpen] = useState(null); 
+  const navigate = useNavigate();
 
-// ----------------------------------------------------------------------
-
-export default function Header({ onOpenNav }) {
-  const theme = useTheme();
-
-  const lgUp = useResponsive('up', 'lg');
-
-  const renderContent = (
-    <>
-
-      {/* <Searchbar /> */}
-
-      <Box sx={{ flexGrow: 1 }} />
-
-      <Stack direction="row" alignItems="center" spacing={1}>
-
-<Avatar  variant="filled" radius="xl" size="lg" color="blue"><AccountPopover/></Avatar> </Stack>
-    </>
-  );
+  const handleClose = () => {
+    setCookieValue('UID', null);
+    console.log('hi');
+    navigate('/login', { replace: true });
+    setOpen(null);
+  };
 
   return (
-    <AppBar
-      sx={{
-        boxShadow: 'none',
-        height: HEADER.H_MOBILE,
-        zIndex: theme.zIndex.appBar + 1,
-        ...bgBlur({
-          color: theme.palette.background.default,
-        }),
-        transition: theme.transitions.create(['height'], {
-          duration: theme.transitions.duration.shorter,
-        }),
-        ...(lgUp && {
-          width: `calc(100% - ${NAV.WIDTH + 1}px)`,
-          height: HEADER.H_DESKTOP,
-        }),
-      }}
-    >
-      <Toolbar
-        sx={{
-          height: 1,
-          px: { lg: 5 },
-        }}
-      >
-        {renderContent}
-      </Toolbar>
-    </AppBar>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" sx={{ background: 'linear-gradient(60deg,#2196f3, #1565c0)' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Button color="inherit">
+              <Avatar variant="filled" radius="xl" size="lg" sx={{ backgroundColor: '#e3f2fd' }}>
+                <AccountPopover />
+              </Avatar>
+            </Button>
+          </Typography>
+          <Button
+            onClick={handleClose}
+            sx={{ backgroundColor: '#e3f2fd' }}
+            endIcon={<Iconify icon="gravity-ui:arrow-right-to-square" />}
+          >
+            خروج
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
-
-Header.propTypes = {
-  onOpenNav: PropTypes.func,
-};

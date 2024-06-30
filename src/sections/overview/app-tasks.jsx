@@ -5,14 +5,20 @@ import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
 import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Rating from '@mui/material/Rating';
 import Popover from '@mui/material/Popover';
+import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { Chip, Avatar, Button, Rating, Divider, TextField } from '@mui/material';
+import TableContainer from '@mui/material/TableContainer';
+import { Chip, Avatar, Divider, TextField, CardHeader } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 
@@ -54,24 +60,89 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
   };
 
   return (
-    <Card {...other} dir="rtl" sx={{ p: 2 }}>
-      <CardHeader align="center" title="مشاوره های شما" />
-      <Box sx={{ direction: 'rtl' }}>
-        <Button variant="contained" disableElevation onClick={handleConsultant}>
-          دریافت مشاوره جدید
-          <Iconify icon="gravity-ui:plus" />
-        </Button>
-      </Box>
-      {list.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          checked={selected.includes(task.id)}
-          onClickComplete={() => handleClickComplete(task.id)}
-          onDelete={() => handleDelete(task.id)}
-          onView={() => handleView(task.id)}
-        />
-      ))}
+    <Card
+      sx={{
+        p: 3,
+        borderRadius: 2,
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#f9f9f9',
+      }}
+      dir="rtl"
+    >    
+      <CardHeader
+        sx={{
+          mb: 3,
+          textAlign: 'center',
+          fontSize: '1.8rem',
+        }}
+        title="مشاوره های شما"
+      />
+      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 2 }}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead sx={{ backgroundColor: '#64b5f6' }}>
+            <TableRow>
+              <TableCell
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#555555',
+                }}
+              >
+                نام مشاور
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#555555',
+                }}
+              >
+                نوع
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#555555',
+                }}
+              >
+                وضعیت
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#555555',
+                }}
+              >
+                تاریخ
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#555555',
+                }}
+              >
+                عملیات
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {list.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                checked={selected.includes(task.id)}
+                onClickComplete={() => handleClickComplete(task.id)}
+                onDelete={() => handleDelete(task.id)}
+                onView={() => handleView(task.id)}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <DeleteConfirmationModal
         open={confirmDeleteOpen}
@@ -85,6 +156,26 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
         taskId={selectedTask}
         tasks={list}
       />
+
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+        <Button
+          variant="contained"
+          disableElevation
+          onClick={handleConsultant}
+          sx={{
+            backgroundColor: '#1976d2',
+            color: '#ffffff',
+            fontSize: '1rem',
+            fontWeight: 'bold',
+            textTransform: 'none',
+            borderRadius: 'px',
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+            '&:hover': { backgroundColor: '#42a5f5' },
+          }}
+        >
+          <Iconify icon="gravity-ui:plus"sx={{ mr: 1 }} /> دریافت مشاوره
+        </Button>
+      </Box>
     </Card>
   );
 }
@@ -114,103 +205,41 @@ function TaskItem({ task, checked, onDelete, onView }) {
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          p: 2,
-          m: 1,
-          border: (theme) => `solid 1px ${theme.palette.divider}`,
-          borderRadius: 2,
-          boxShadow: 1,
-          backgroundColor: checked ? 'grey.100' : 'background.paper',
-          '&:hover': {
-            boxShadow: 3,
-          },
-          transition: 'box-shadow 0.3s ease-in-out',
-          position: 'relative',
-          borderLeft: '4px solid green',
-        }}
-      >
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{
-                flexGrow: 1,
-                textDecoration: checked ? 'line-through' : 'none',
-                color: checked ? 'text.disabled' : 'text.primary',
-              }}
-            >
-              نام مشاور: {task.name}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{
-                flexGrow: 1,
-                textDecoration: checked ? 'line-through' : 'none',
-                color: checked ? 'text.disabled' : 'text.primary',
-              }}
-            >
-              نوع مشاوره: {task.type}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{
-                flexGrow: 1,
-                textDecoration: checked ? 'line-through' : 'none',
-                color: checked ? 'text.disabled' : 'text.primary',
-              }}
-            >
-              وضعیت: {task.status}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{
-                flexGrow: 1,
-                textDecoration: checked ? 'line-through' : 'none',
-                color: checked ? 'text.disabled' : 'text.primary',
-              }}
-            >
-              تاریخ: {task.date}
-            </Typography>
-          </Box>
-
-          <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </Stack>
-      </Box>
-
-      <Popover
-        open={!!openMenu}
-        anchorEl={openMenu}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <MenuItem onClick={onView}>
-          <Iconify icon="gravity-ui:chevrons-expand-up-right" sx={{ mr: 2 }} />
-          مشاهده
-        </MenuItem>
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="solar:share-bold" sx={{ mr: 2 }} />
-          اشتراک گذاری
-        </MenuItem>
-        <MenuItem onClick={onDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="solar:trash-bin-trash-bold" sx={{ mr: 2 }} />
-          لغو
-        </MenuItem>
-      </Popover>
-    </>
+    <TableRow
+      sx={{
+        '&:hover': { backgroundColor: '#f5f5f5' },
+      }}
+    >
+      <TableCell>{task.name}</TableCell>
+      <TableCell>{task.type}</TableCell>
+      <TableCell>فعال</TableCell>
+      <TableCell>{task.date}</TableCell>
+      <TableCell>
+        <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+        <Popover
+          open={!!openMenu}
+          anchorEl={openMenu}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <MenuItem onClick={onView}>
+            <Iconify icon="gravity-ui:chevrons-expand-up-right" sx={{ mr: 2 }} />
+            مشاهده
+          </MenuItem>
+          <MenuItem onClick={handleShare}>
+            <Iconify icon="solar:share-bold" sx={{ mr: 2 }} />
+            اشتراک گذاری
+          </MenuItem>
+          <MenuItem onClick={onDelete} sx={{ color: 'error.main' }}>
+            <Iconify icon="solar:trash-bin-trash-bold" sx={{ mr: 2 }} />
+            لغو
+          </MenuItem>
+        </Popover>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -321,7 +350,7 @@ function ViewModal({ open, onClose, taskId, tasks }) {
         <Rating
           name="simple-controlled"
           value={starValue}
-          onChange={(event, newValue) => {
+          onChange={(newValue) => {
             setStarValue(newValue);
           }}
           size="large"

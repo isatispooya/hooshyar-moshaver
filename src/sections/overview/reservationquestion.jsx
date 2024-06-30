@@ -1,45 +1,28 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 
-import { Divider, Typography } from '@mui/material';
+import {
+  Radio,
+  Divider,
+  Accordion,
+  TextField,
+  Typography,
+  RadioGroup,
+  FormControl,
+  AccordionSummary,
+  AccordionDetails,
+  FormControlLabel,
+} from '@mui/material';
+
+import Iconify from 'src/components/iconify';
+
+import { questions } from './questionConfig';
 
 const Reservationquestion = () => {
-  const questions = [
-    {
-      num: 1,
-      question: 'کدام یک از گزینه‌های زیر صحیح است؟',
-      options: ['گزینه ۱', 'گزینه ۲', 'گزینه ۳', 'گزینه ۴'],
-    },
-    {
-      num: 2,
-      question: 'رنگ آسمان در روز چیست؟',
-      options: ['قرمز', 'سبز', 'آبی', 'زرد'],
-    },
-    {
-      num: 3,
-      question: 'کدام حیوان شیر است؟',
-      options: ['گربه', 'سگ', 'شیر', 'موش'],
-    },
-    {
-      num: 4,
-      question: 'کدام سیاره نزدیک‌ترین به خورشید است؟',
-      options: ['زهره', 'مریخ', 'عطارد', 'زمین'],
-    },
-    {
-      num: 5,
-      question: 'مجموعه اعداد زیر چه عددی را تشکیل می‌دهد؟ 2 + 3',
-      options: ['4', '5', '6', '7'],
-    },
-  ];
+  const [selectedOptions, setSelectedOptions] = useState(new Array(questions.option));
 
-  const [selectedOptions, setSelectedOptions] = useState(Array(questions.length).fill(null));
 
-  const handleRadioChange = (index, option) => {
-    const newSelectedOptions = [...selectedOptions];
-    newSelectedOptions[index] = option;
-    setSelectedOptions(newSelectedOptions);
-  };
-
+  console.log(selectedOptions);
   return (
     <div style={styles.container}>
       <div style={styles.quizBox}>
@@ -50,27 +33,49 @@ const Reservationquestion = () => {
           سوالات زیر را بخوانید و پاسخ مناسب دهید
         </Typography>
         <Divider />
+        <div style={styles.questionContainer}>
+          <Typography variant="h6" style={styles.question}>
+            1. شما چند سال سن دارید؟
+          </Typography>
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="outlined-number"
+            label="سن شما"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </div>
         {questions.map((q, qIndex) => (
-          <div key={qIndex} style={styles.questionContainer}>
-            <Typography variant="h6" style={styles.question}>
-              {q.num}.{q.question}
-            </Typography>
-            <div style={styles.optionsContainer}>
-              {q.options.map((option, index) => (
-                <label key={index} style={styles.optionLabel}>
-                  <input
-                    type="radio"
-                    name={`quiz-${qIndex}`}
-                    value={option}
-                    checked={selectedOptions[qIndex] === option}
-                    onChange={() => handleRadioChange(qIndex, option)}
-                    style={styles.radioInput}
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
-          </div>
+          <Accordion key={qIndex} style={styles.accordion}>
+            <AccordionSummary expandIcon={<Iconify icon="gravity-ui:plus" />}>
+              <Typography variant="h6" style={{fontSize: '16px',marginTop: '15px',  borderRadius: '30px',color: selectedOptions[qIndex] ? 'inherit' : 'red'}} >
+                {q.num}. {q.question}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  aria-label={`quiz-${qIndex}`}
+                  name={`quiz-${qIndex}`}
+                  value={selectedOptions[qIndex]}
+                >
+                  {q.options.map((option, index) => (
+                    <FormControlLabel
+                      key={index}
+                      value={option}
+                      control={<Radio />}
+                      label={option}
+                      style={styles.option}
+                      onChange={((e)=>setSelectedOptions(e.target.value))}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </AccordionDetails>
+          </Accordion>
         ))}
       </div>
     </div>
@@ -90,39 +95,25 @@ const styles = {
   },
   quizBox: {
     backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    padding: '30px',
+    borderRadius: '20px',
+    boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
     width: '100%',
-    maxWidth: '700px',
+    maxWidth: '750px',
     textAlign: 'right',
-    border: '2px solid #78909c',
+    border: '10px solid #fafafa',
+
   },
   questionContainer: {
-    marginBottom: '20px',
-    paddingBottom: '10px',
+    marginBottom: '25px',
+    paddingBottom: '15px',
+
   },
-  question: {
-    fontSize: '18px',
-    marginBottom: '10px',
+  option: {
+    margin: '10px 0',
   },
-  optionsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  optionLabel: {
-    fontSize: '16px',
-    padding: '10px',
-    margin: '5px 0',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: '#e1f5fe',
-    borderRadius: '5px',
-    transition: 'background-color 0.3s ease',
-  },
-  radioInput: {
-    marginLeft: '10px',
+  accordion: {
+    marginBottom: '15px',
   },
 };
 

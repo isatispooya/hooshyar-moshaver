@@ -1,6 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// src/utils/cookie.js
-
 import Cookies from 'js-cookie';
 
 export const setCookieValue = (name, value, options = {}) => {
