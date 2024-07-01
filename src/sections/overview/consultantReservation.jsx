@@ -1,7 +1,10 @@
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
+import { useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
-// eslint-disable-next-line import/no-unresolved
 import Box from '@mui/material/Box';
 import Step from '@mui/material/Step';
 import Button from '@mui/material/Button';
@@ -20,24 +23,60 @@ const steps = ['سوالات', 'نوع مشاوره', 'انتخاب مشاور',
 export default function ConfirmationModal() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const Navigate = useNavigate();
 
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [num3, setNum3] = useState('');
+  const [num4, setNum4] = useState('');
+  const [num5, setNum5] = useState('');
+  const [num6, setNum6] = useState('');
+  const [num7, setNum7] = useState('');
+  const [num8, setNum8] = useState('');
+  const [num9, setNum9] = useState('');
+  const [num10, setNum10] = useState('');
   const isStepOptional = (step) => step === 1;
 
   const isStepSkipped = (step) => skipped.has(step);
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
+    const unanswered = {
+      num1: !num1,
+      num2: !num2,
+      num3: !num3,
+      num4: !num4,
+      num5: !num5,
+      num6: !num6,
+      num7: !num7,
+      num8: !num8,
+      num9: !num9,
+      num10: !num10,
+    };
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    // if (Object.values(unanswered).includes(true)) {
+      toast.error('لطفا به تمام سوالات پاسخ دهید');
+    // } else {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' 
+      });
+    // }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleBackDashboard = () => {
+    Navigate('/');
   };
 
   const handleSkip = () => {
@@ -56,6 +95,8 @@ export default function ConfirmationModal() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  
 
   return (
     <Box sx={{ width: '80%', direction: 'ltr', margin: 'auto', marginTop: '0vh' }}>
@@ -90,7 +131,21 @@ export default function ConfirmationModal() {
         <>
           <Typography sx={{ mt: 2, mb: 1 }}>
             {activeStep === 0 ? (
-              <Reservationquestion />
+              <h1>hi</h1>
+              /* <Reservationquestion
+                setNum1={setNum1}
+                setNum2={setNum2}
+                setNum3={setNum3}
+                setNum4={setNum4}
+                setNum5={setNum5}
+                setNum6={setNum6}
+                setNum7={setNum7}
+                setNum8={setNum8}
+                setNum9={setNum9}
+                setNum10={setNum10}
+                selectedOptions={selectedOptions}
+                setSelectedOptions={setSelectedOptions}
+              /> */
             ) : activeStep === 1 ? (
               <ReservationType />
             ) : activeStep === 2 ? (
@@ -112,8 +167,7 @@ export default function ConfirmationModal() {
                     type: 'تلفنی-حضوری',
                     expertise: 'کارشناس بازارهای مالی',
                     star: 2,
-                                        status:false
-
+                    status: false,
                   },
                   {
                     id: '3',
@@ -173,11 +227,14 @@ export default function ConfirmationModal() {
             ) : activeStep === 3 ? (
               <ReservationTime />
             ) : (
-              <ReservationInvoice/>
+              <ReservationInvoice />
             )}
           </Typography>
 
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button  onClick={handleBackDashboard} sx={{ mr: 1 }}>
+              بازگشت به پنل کاربری
+            </Button>
             <Button
               variant="contained"
               disabled={activeStep === 0}
@@ -198,6 +255,7 @@ export default function ConfirmationModal() {
           </Box>
         </>
       )}
+      <ToastContainer />
     </Box>
   );
 }

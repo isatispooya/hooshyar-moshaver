@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Radio,
@@ -18,11 +18,38 @@ import Iconify from 'src/components/iconify';
 
 import { questions } from './questionConfig';
 
-const Reservationquestion = () => {
-  const [selectedOptions, setSelectedOptions] = useState(new Array(questions.option));
+const ReservationQuestion = ({
+  setNum1,
+  setNum2,
+  setNum3,
+  setNum4,
+  setNum5,
+  setNum6,
+  setNum7,
+  setNum8,
+  setNum9,
+  setNum10,
+  selectedOptions,
+  setSelectedOptions,
+}) => {
+  const handleOptionChange = (questionIndex, option) => {
+    setSelectedOptions((prevSelectedOptions) => ({
+      ...prevSelectedOptions,
+      [questionIndex]: option,
+    }));
 
+    const updatedValue = { [questionIndex]: option };
+    setNum2(updatedValue);
+    setNum3(updatedValue);
+    setNum4(updatedValue);
+    setNum5(updatedValue);
+    setNum6(updatedValue);
+    setNum7(updatedValue);
+    setNum8(updatedValue);
+    setNum9(updatedValue);
+    setNum10(updatedValue);
+  };
 
-  console.log(selectedOptions);
   return (
     <div style={styles.container}>
       <div style={styles.quizBox}>
@@ -43,6 +70,7 @@ const Reservationquestion = () => {
             id="outlined-number"
             label="سن شما"
             type="number"
+            onChange={(e) => setNum1(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -51,7 +79,14 @@ const Reservationquestion = () => {
         {questions.map((q, qIndex) => (
           <Accordion key={qIndex} style={styles.accordion}>
             <AccordionSummary expandIcon={<Iconify icon="gravity-ui:plus" />}>
-              <Typography variant="h6" style={{fontSize: '16px',marginTop: '15px',  borderRadius: '30px',color: selectedOptions[qIndex] ? 'inherit' : 'red'}} >
+              <Typography
+                variant="h6"
+                style={{
+                  fontSize: '16px',
+                  marginTop: '15px',
+                  borderRadius: '30px',
+                }}
+              >
                 {q.num}. {q.question}
               </Typography>
             </AccordionSummary>
@@ -60,7 +95,8 @@ const Reservationquestion = () => {
                 <RadioGroup
                   aria-label={`quiz-${qIndex}`}
                   name={`quiz-${qIndex}`}
-                  value={selectedOptions[qIndex]}
+                  value={selectedOptions[qIndex] || ''}
+                  onChange={(e) => handleOptionChange(qIndex, e.target.value)}
                 >
                   {q.options.map((option, index) => (
                     <FormControlLabel
@@ -69,7 +105,6 @@ const Reservationquestion = () => {
                       control={<Radio />}
                       label={option}
                       style={styles.option}
-                      onChange={((e)=>setSelectedOptions(e.target.value))}
                     />
                   ))}
                 </RadioGroup>
@@ -102,12 +137,10 @@ const styles = {
     maxWidth: '750px',
     textAlign: 'right',
     border: '10px solid #fafafa',
-
   },
   questionContainer: {
     marginBottom: '25px',
     paddingBottom: '15px',
-
   },
   option: {
     margin: '10px 0',
@@ -117,4 +150,19 @@ const styles = {
   },
 };
 
-export default Reservationquestion;
+ReservationQuestion.propTypes = {
+  setNum1: PropTypes.func.isRequired,
+  setNum2: PropTypes.func.isRequired,
+  setNum3: PropTypes.func.isRequired,
+  setNum4: PropTypes.func.isRequired,
+  setNum5: PropTypes.func.isRequired,
+  setNum6: PropTypes.func.isRequired,
+  setNum7: PropTypes.func.isRequired,
+  setNum8: PropTypes.func.isRequired,
+  setNum9: PropTypes.func.isRequired,
+  setNum10: PropTypes.func.isRequired,
+  selectedOptions: PropTypes.object.isRequired,
+  setSelectedOptions: PropTypes.func.isRequired,
+};
+
+export default ReservationQuestion;
