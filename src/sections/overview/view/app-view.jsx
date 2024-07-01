@@ -1,6 +1,8 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import Iconify from 'src/components/iconify';
+
 import AppTasks from '../app-tasks';
 import AppWidgetSummary from '../app-widget-summary';
 
@@ -55,63 +57,63 @@ export default function AppView() {
                 name: 'مشاوره با اقای دکتر محمد زمانی ',
                 type: 'تلفنی ',
                 date: '12/6/04',
-                status: true,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '3',
                 name: 'مشاوره با خانم دکتر سارا اسدی',
                 type: 'حضوری',
                 date: '12/9/19',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '4',
                 name: 'مشاوره با اقای دکتر رضا مقدم ',
                 type: 'حضوری ',
                 date: '12/10/30',
-                status: true,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '5',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '6',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '7',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '8',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '9',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
               {
                 id: '10',
                 name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
                 type: 'تلفنی ',
                 date: '12/12/5',
-                status: false,
+                status: <Iconify icon="gravity-ui:check"/>,
               },
             ]}
           />

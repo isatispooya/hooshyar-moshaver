@@ -13,6 +13,7 @@ import Iconify from 'src/components/iconify';
 import AccountPopover from './common/account-popover';
 
 export default function Header() {
+  // eslint-disable-next-line no-unused-vars
   const [open, setOpen] = useState(null);
   const navigate = useNavigate();
 

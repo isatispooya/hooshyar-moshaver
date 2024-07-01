@@ -1,8 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Grid, Typography, IconButton, styled } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+
+import { Grid, styled, Typography, IconButton } from '@mui/material';
+
 import { getCookieValue } from 'src/utils/cookie';
+
 import { Onrun } from 'src/api/onRun';
+
 import Iconify from 'src/components/iconify';
 
 const StyledBox = styled(Grid)(({ selected }) => ({
@@ -12,17 +16,20 @@ const StyledBox = styled(Grid)(({ selected }) => ({
   justifyContent: 'center',
   padding: '40px',
   margin: '20px',
-  border: selected ? '2px solid #42a5f5' : '2px solid #ccc',
+  border: selected ? '4px solid #e1f5fe' : '2px solid #f5f5f5',
   borderRadius: '12px',
   cursor: 'pointer',
   backgroundColor: selected ? '#e3f2fd' : '#ffffff',
   transition: 'all 0.3s ease',
-  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+  boxShadow: selected ? '0px 0px 20px rgba(0, 0, 0, 0.2)' : '0px 0px 10px rgba(0, 0, 0, 0.1)',
+  transform: selected ? 'scale(1.05)' : 'scale(1)',
   '&:hover': {
     transform: 'scale(1.05)',
-    boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
+    boxShadow: selected ? '0px 0px 20px rgba(0, 0, 0, 0.2)' : '0px 0px 15px #e1f5fe',
   },
 }));
+
+
 
 const TitleBox = styled(Grid)({
   display: 'flex',
@@ -71,24 +78,22 @@ const ReservationType = () => {
   return (
     <Grid
       container
-      spacing={2}
       justifyContent="center"
       alignItems="center"
       style={{
-        minHeight: '70vh',
-        backgroundColor: '#f5f5f5',
+        minHeight: '50vh',
+        backgroundColor: '#fafafa',
         borderRadius: 20,
         padding: '20px',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
-        marginTop:'50px',
-        width:'50vw'
+        margin: '10rem auto',
+        width: '50vw',
+        maxWidth: '800px',
       }}
     >
       <Grid item xs={12}>
         <TitleBox>
-          <Typography variant="h5" color="primary">
-            لطفاً نوع مشاوره خود را انتخاب کنید
-          </Typography>
+          <Typography variant="h5">لطفاً نوع مشاوره خود را انتخاب کنید</Typography>
         </TitleBox>
       </Grid>
       {typeData.map((item, index) => (
@@ -106,12 +111,6 @@ const ReservationType = () => {
               style={{ color: selected === item.title ? '#42a5f5' : '#000' }}
             >
               {item.title}
-            </Typography>
-            <Typography
-              variant="h6"
-              style={{ color: selected === item.title ? '#42a5f5' : '#000' }}
-            >
-              {item.price}
             </Typography>
           </StyledBox>
         </Grid>

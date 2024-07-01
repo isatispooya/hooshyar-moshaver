@@ -66,9 +66,10 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
         borderRadius: 2,
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
         backgroundColor: '#f9f9f9',
+
       }}
       dir="rtl"
-    >    
+    >
       <CardHeader
         sx={{
           mb: 3,
@@ -77,7 +78,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
         }}
         title="مشاوره های شما"
       />
-      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 2 }}>
+      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto', }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: '#64b5f6' }}>
             <TableRow>
@@ -129,7 +130,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
             </TableRow>
           </TableHead>
 
-          <TableBody>
+          <TableBody style={{borderRight:'5px solid green'}}>
             {list.map((task) => (
               <TaskItem
                 key={task.id}
@@ -173,7 +174,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
             '&:hover': { backgroundColor: '#42a5f5' },
           }}
         >
-          <Iconify icon="gravity-ui:plus"sx={{ mr: 1 }} /> دریافت مشاوره
+          <Iconify icon="gravity-ui:plus" sx={{ mr: 1 }} /> دریافت مشاوره
         </Button>
       </Box>
     </Card>
@@ -207,17 +208,21 @@ function TaskItem({ task, checked, onDelete, onView }) {
   return (
     <TableRow
       sx={{
+        border:'2px solid #e0e0e0',
         '&:hover': { backgroundColor: '#f5f5f5' },
       }}
     >
       <TableCell>{task.name}</TableCell>
       <TableCell>{task.type}</TableCell>
-      <TableCell>فعال</TableCell>
+      <TableCell style={{ color: 'green' ,display:'flex',marginRight:'20px'}}>
+      <Iconify icon="gravity-ui:circle-check"/>      </TableCell>
       <TableCell>{task.date}</TableCell>
       <TableCell>
-        <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        
+          <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
+            <Iconify  icon="eva:more-vertical-fill" />
+          </IconButton>
+
         <Popover
           open={!!openMenu}
           anchorEl={openMenu}
