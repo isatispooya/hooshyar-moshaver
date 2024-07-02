@@ -1,22 +1,29 @@
+/* eslint-disable perfectionist/sort-imports */
+/* eslint-disable import/order */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-shadow */
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Popover from '@mui/material/Popover';
 import { alpha } from '@mui/material/styles';
-import { CircularProgress } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import {
+  Box,
+  Avatar,
+  Popover,
+  Divider,
+  MenuItem,
+  Typography,
+  IconButton,
+  ListItemIcon,
+} from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
 
 import { Onrun } from 'src/api/onRun';
 import { account } from 'src/_mock/account';
-// ----------------------------------------------------------------------
+
+import Iconify from 'src/components/iconify';
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
@@ -51,7 +58,11 @@ export default function AccountPopover() {
         } else if (error.response.status === 500) {
           setError('Server error. Please try again later.');
         } else {
-          setError(error.response.data.message || error.message || 'An unexpected error occurred');
+          setError(
+            error.response.data.message ||
+              error.message ||
+              'An unexpected error occurred'
+          );
         }
       } else {
         setError('Network error. Please check your internet connection.');
@@ -84,7 +95,8 @@ export default function AccountPopover() {
         sx={{
           width: 40,
           height: 40,
-          background: (theme) => alpha(theme.palette.grey[500], 0.08),
+          background: (theme) =>
+            alpha(theme.palette.grey[500], 0.08),
           ...(open && {
             background: (theme) =>
               `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
@@ -107,7 +119,7 @@ export default function AccountPopover() {
       <Popover
         open={!!open}
         anchorEl={open}
-        onClose={handleprofile}
+        onClose={() => setOpen(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
@@ -124,24 +136,39 @@ export default function AccountPopover() {
         }}
       >
         <Box sx={{ my: 2, px: 2, direction: 'ltr' }}>
-          <Typography variant="subtitle2" noWrap sx={{ fontWeight: 'bold', mb: 0.5 }}>
-            نام و نام خانوادگی:
-            {profile.name || 'نام نامشخص'} {profile.last_name || 'نام خانوادگی نامشخص'}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 0.5 }} noWrap>
-            شماره تلفن:
-            {profile.mobile || 'شماره تلفن نامشخص'}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 0.5 }} noWrap>
-            ایمیل:
-            {profile.email || 'ایمیل نامشخص'}
-          </Typography>
-          {error && (
-            <Typography variant="body2" sx={{ color: 'error.main', mb: 0.5 }} noWrap>
-              {error}
-              <CircularProgress />
-            </Typography>
-          )}
+          <Box sx={{ display: 'flex', alignItems: 'center', pb: 2 }}>
+            <Avatar
+              sx={{ bgcolor: 'pink', width: 56, height: 56, mr: 2 }}
+            >
+              {profile.name ? profile.name.charAt(0) : 'null'}
+            </Avatar>
+            <Box>
+              <Typography variant="body1" fontWeight="bold">
+                {profile.name || 'نام نامشخص'}{' '}
+                {profile.last_name || 'نام خانوادگی نامشخص'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {profile.mobile || 'شماره تلفن نامشخص'}
+              </Typography>
+               <Typography variant="body2" color="text.secondary">
+               {profile.email || 'ایمیل نامشخص'}
+             </Typography>
+            </Box>
+          </Box>
+          <Divider />
+          <MenuItem onClick={() => navigate('/edit')}>
+            <ListItemIcon>
+              <Iconify icon="material-symbols:person-edit-rounded"/>
+            </ListItemIcon>
+          ویرایش 
+          </MenuItem>
+          <MenuItem onClick={() => navigate('/TransactionHistory')}>
+            <ListItemIcon>
+              <Iconify icon="gravity-ui:circle-dollar"/>
+            </ListItemIcon>
+          لیست تراکنش های من
+          </MenuItem>
+        
         </Box>
       </Popover>
     </>

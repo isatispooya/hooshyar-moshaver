@@ -10,6 +10,8 @@ export const ConsultantReservation = lazy(() => import('src/sections/overview/Co
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+export const EditProfile = lazy(() => import('src/sections/overview/editProfile'));
+export const TransactionHistory = lazy(() => import('src/sections/overview/transactionHistory'));
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,8 @@ export default function Router() {
         { path: 'ConsultantReservation', element: <ConsultantReservation /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+        { path: 'edit', element: <EditProfile /> },
+        { path: 'transactionHistory', element: <TransactionHistory /> },
       ],
     },
     {

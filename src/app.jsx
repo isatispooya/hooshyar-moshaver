@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-imports */
-import 'src/global.css';
+import'./global.css'
 import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import Router from 'src/routes/sections';
