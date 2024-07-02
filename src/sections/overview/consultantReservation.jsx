@@ -24,7 +24,15 @@ const steps = ['سوالات', 'نوع مشاوره', 'انتخاب مشاور',
 export default function ConfirmationModal() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [selectedConsultant, setSelectedConsultant] = React.useState(null);
+  const [consultantData, setConsultantData] = useState([]);
+  const [consultantId, setConsultantId] = useState(null); 
   const Navigate = useNavigate();
+
+  const handleSelectConsultant = (index) => {
+    setSelectedConsultant(index);
+    setConsultantId(consultantData[index].id); 
+  };
 
   const [num1, setNum1] = useState('');
   const [num2, setNum2] = useState('');
@@ -150,82 +158,14 @@ export default function ConfirmationModal() {
               <ReservationType />
             ) : activeStep === 2 ? (
               <ChoosingConsultant
-                List={[
-                  {
-                    id: '1',
-                    avatar: 'https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg',
-                    name: '  اقای دکتر محمد زمانی ',
-                    type: 'حضوری',
-                    expertise: 'متخصص مشاوره بورس وکارشناس تحلیل تکنیکال',
-                    star: 5,
-                  },
-                  {
-                    id: '2',
-                    avatar:
-                      'https://moshavergroup.com/uploads/2018/01/%D9%85%D8%B4%D8%A7%D9%88%D8%B1%D9%87-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86.jpg',
-                    name: 'مشاوره با خانم دکتر سارا اسدی',
-                    type: 'تلفنی-حضوری',
-                    expertise: 'کارشناس بازارهای مالی',
-                    star: 2,
-                    status: false,
-                  },
-                  {
-                    id: '3',
-                    avatar:
-                      'https://moshavergroup.com/uploads/2018/01/Support-call-us-e1410682733686.jpg126587.jpg',
-                    name: 'مشاوره با اقای دکتر رضا مقدم ',
-                    type: 'تلفنی-حضوری',
-                    expertise: 'کارشناس ارز دیجیتال | متاورس | NFT',
-                    star: 3,
-                  },
-                  {
-                    id: '4',
-                    avatar:
-                      'https://yourkilid.com/wp-content/uploads/2021/11/client-centric-call-centres-for-medical-aids-a-must.jpg',
-                    name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
-                    type: 'حضوری',
-                    expertise: 'کارشناس تحلیل بنیادی',
-                    star: 1,
-                  },
-                  {
-                    id: '5',
-                    avatar: 'https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg',
-                    name: '  اقای دکتر محمد زمانی ',
-                    type: 'حضوری',
-                    expertise: 'متخصص مشاوره بورس وکارشناس تحلیل تکنیکال',
-                    star: 5,
-                  },
-                  {
-                    id: '6',
-                    avatar:
-                      'https://moshavergroup.com/uploads/2018/01/%D9%85%D8%B4%D8%A7%D9%88%D8%B1%D9%87-%D8%AA%D8%AD%D8%B5%DB%8C%D9%84%DB%8C-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86.jpg',
-                    name: 'مشاوره با خانم دکتر سارا اسدی',
-                    type: 'تلفنی-حضوری',
-                    expertise: 'کارشناس بازارهای مالی',
-                    star: 5,
-                  },
-                  {
-                    id: '7',
-                    avatar:
-                      'https://moshavergroup.com/uploads/2018/01/Support-call-us-e1410682733686.jpg126587.jpg',
-                    name: 'مشاوره با اقای دکتر رضا مقدم ',
-                    type: 'تلفنی-حضوری',
-                    expertise: 'کارشناس ارز دیجیتال | متاورس | NFT',
-                    star: 3,
-                  },
-                  {
-                    id: '8',
-                    avatar:
-                      'https://yourkilid.com/wp-content/uploads/2021/11/client-centric-call-centres-for-medical-aids-a-must.jpg',
-                    name: 'مشاوره با خانم دکتر مریم امیرجلیلی',
-                    type: 'حضوری',
-                    expertise: 'کارشناس تحلیل بنیادی',
-                    star: 1,
-                  },
-                ]}
+               setConsultantData={setConsultantData}
+               handleSelectConsultant={handleSelectConsultant}
+               selectedConsultant={selectedConsultant}
+               consultantData={consultantData}
+               
               />
             ) : activeStep === 3 ? (
-              <ReservationTime />
+              <ReservationTime consultantId={consultantId}/>
             ) : (
               <ReservationInvoice />
             )}

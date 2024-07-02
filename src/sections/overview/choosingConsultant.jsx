@@ -1,16 +1,16 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import { Rating } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import CardContent from '@mui/material/CardContent';
+import { CardContent, Rating } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
 
@@ -18,13 +18,7 @@ import { Onrun } from 'src/api/onRun';
 
 import Iconify from 'src/components/iconify';
 
-export default function ChoosingConsultant({ List }) {
-  const [selectedConsultant, setSelectedConsultant] = React.useState(null);
-  const [consultantData, setConsultantData] = useState([]);
-
-  const handleSelectConsultant = (index) => {
-    setSelectedConsultant(index);
-  };
+export default function ChoosingConsultant({setConsultantData, consultantData, selectedConsultant, handleSelectConsultant }) {
 
   const fetchConsultant = async () => {
     const token = getCookieValue('UID');
@@ -37,11 +31,10 @@ export default function ChoosingConsultant({ List }) {
       });
       setConsultantData(response.data);
     } catch (error) {
-      console.log('Error fetching type data:', error);
+      console.log('Error fetching consultant data:', error);
     }
   };
 
-  console.log(consultantData);
   useEffect(() => {
     fetchConsultant();
   }, []);
@@ -54,6 +47,7 @@ export default function ChoosingConsultant({ List }) {
   useEffect(() => {
     checkUID();
   }, []);
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -97,7 +91,7 @@ export default function ChoosingConsultant({ List }) {
                   {consultant.name} {consultant.last_name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" align="center">
-                  {consultant.postion}
+                  {consultant.position}
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                   <Rating name="read-only" value={consultant.rank} readOnly />
@@ -129,3 +123,10 @@ export default function ChoosingConsultant({ List }) {
     </Box>
   );
 }
+
+ChoosingConsultant.propTypes = {
+  consultantData: PropTypes.array.isRequired,
+  selectedConsultant: PropTypes.number.isRequired,
+  setConsultantData:PropTypes.func.isRequired,
+  handleSelectConsultant: PropTypes.func.isRequired,
+};
