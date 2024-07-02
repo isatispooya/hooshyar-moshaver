@@ -15,16 +15,18 @@ export default function AppView() {
             title="مشاوران"
             total={15}
             color="success"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+
           />
         </Grid>
 
         <Grid xs={12} sm={6} md={3}>
+
           <AppWidgetSummary
             title="ثبت نام کنندگان"
             total={150}
             color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+         
           />
         </Grid>
 

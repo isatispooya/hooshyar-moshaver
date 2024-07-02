@@ -144,7 +144,7 @@ export default function LoginView() {
     <>
       {!secondForm && !thirdForm && (
         <>
-          <Stack spacing={3}>
+          <Stack   spacing={3}>
             <TextField
               name="mobile"
               label="شماره موبایل"
@@ -170,7 +170,7 @@ export default function LoginView() {
             </Stack>
           )}
 
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div   style={{ textAlign: 'center', marginTop: '20px' }}>
             <LoadingButton
               fullWidth
               size="large"
@@ -178,6 +178,7 @@ export default function LoginView() {
               variant="contained"
               color="inherit"
               onClick={handleClick}
+             
             >
               تایید
             </LoadingButton>
@@ -213,6 +214,7 @@ export default function LoginView() {
               variant="contained"
               color="inherit"
               onClick={loginClick}
+            
             >
               ورود
             </LoadingButton>
@@ -354,9 +356,9 @@ export default function LoginView() {
         >
           {!secondForm && !thirdForm && (
             <>
-              <Typography variant="h3"> ورود</Typography>
+              <Typography variant="h3" > ورود</Typography>
               <Divider sx={{ my: 3 }}>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2"  sx={{ color: 'text.secondary' }}>
                   ورود
                 </Typography>
               </Divider>

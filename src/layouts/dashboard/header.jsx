@@ -41,13 +41,19 @@ export default function Header() {
             </Button>
           </Typography>
           <Button
+
             onClick={handleClose}
             sx={{
               bgcolor: '#e3f2fd',
+              color: '#1f8dea', 
               '@media (max-width: 600px)': {
                 fontSize: '0.8rem',
                 padding: '8px 12px',
                 display: 'none',
+              },
+              '&:hover': {
+                color: '#fff', 
+                bgcolor: '#1f8dea', 
               },
             }}
             endIcon={<Iconify icon="gravity-ui:arrow-right-to-square" />}
