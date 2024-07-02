@@ -38,11 +38,22 @@ const styles = {
   },
 };
 
+
 function Information() {
 const [time,setTime]=useState(null)
 console.log(time);
+
+
+
+
+
+
   
   const chips = ['8_9', '9_10', '10_11', '11_12', '12_13', '13_14', '14_15'];
+
+
+
+  
 
   return (
     <div style={styles.information}>

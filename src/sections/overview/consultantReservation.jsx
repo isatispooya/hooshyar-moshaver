@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import * as React from 'react';
 import { useState } from 'react';
@@ -23,7 +24,6 @@ const steps = ['سوالات', 'نوع مشاوره', 'انتخاب مشاور',
 export default function ConfirmationModal() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [selectedOptions, setSelectedOptions] = useState({});
   const Navigate = useNavigate();
 
   const [num1, setNum1] = useState('');
