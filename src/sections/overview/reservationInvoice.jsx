@@ -1,3 +1,6 @@
+/* eslint-disable no-dupe-keys */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 
@@ -11,6 +14,8 @@ import { Button, Avatar, Divider, TextField, Typography } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 
+
+
 const tableContainerStyle = {
   maxWidth: 900,
   margin: 'auto',
@@ -18,8 +23,11 @@ const tableContainerStyle = {
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
   borderRadius: '8px',
   marginTop: '20px',
-  color:'#616161'
+  color: '#616161',
+  marginRight: window.innerWidth >= 1334 ? '12rem' : '0',
 };
+
+
 
 const lastRowStyle = {
   backgroundColor: '#e3f2fd',
@@ -50,12 +58,12 @@ const BasicTable = () => {
     minWidth: 'auto',
     padding: '0',
     margin: '10px',
-    backgroundColor: isCodeValid === null ? 'gray' : isCodeValid ? 'green' : 'red',
+    backgroundColor: isCodeValid === null ? 'blue' : isCodeValid ? 'green' : 'red',
   };
 
   const headerText = {
     marginBottom: '40px',
-    fontSize: '20px',
+    fontSize: '18px',
     textAlign: 'center',
     marginTop: '20px',
   };
@@ -76,7 +84,7 @@ const BasicTable = () => {
           helperText={isCodeValid === false ? 'کد تخفیف نامعتبر است' : ''}
         />
         <Button onClick={handleCodeValidation} variant="contained" style={buttonStyle}>
-          <Iconify icon="gravity-ui:circle-check-fill" />
+          <Iconify  icon="gravity-ui:circle-check-fill" />
         </Button>
       </>,
       isCodeValid
@@ -85,7 +93,7 @@ const BasicTable = () => {
   ];
 
   return (
-    <div style={{ margin: '20px' }}>
+    <div style={{ margin: '20px'}}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <Avatar
           src="https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg"
@@ -96,25 +104,20 @@ const BasicTable = () => {
           <Typography variant="body2" style={{ fontSize: '14px', color: '#666' }}>
             متخصص مشاوره بورس و کارشناس تحلیل تکنیکال
           </Typography>
-          <Typography variant="body2" style={{ fontSize: '14px', color: '#666' }}>
-            نوع مشاوره : حضوری
-          </Typography>
-          <Typography variant="body2" style={{ fontSize: '14px', color: '#666' }}>
-            زمان مشاوره : 12/6/1403 12:30
-          </Typography>
+          
         </div>
       </div>
 
-      <TableContainer component={Paper} style={tableContainerStyle}>
-      <div style={headerText}>پیش فاکتور شما</div>
+      <TableContainer component={Paper}    style={tableContainerStyle}>
+        <div className='text-xl font-bold text-[#212b36]' style={headerText}>اطلاعات پرداخت</div>
       <Divider/>
 
         <Table aria-label="simple table">
           <TableBody>
             {rows.map((row, index) => (
-              <TableRow key={row.name} style={index === rows.length - 1 ? lastRowStyle : {}}>
+              <TableRow  key={row.name} style={index === rows.length - 1 ? lastRowStyle : {}}>
                 <TableCell component="th" scope="row">
-                  <Typography variant="inherit" style={row.name === 'مجموع' ? { fontWeight: 'bold',color:'#424242',fontSize:'18px' } : {fontWeight: 'bold',color:'#757575' ,fontSize:'14px'}}>
+                  <Typography variant="inherit" style={row.name === 'مجموع' ? { fontWeight: 'bold', color: '#212b36', fontSize: '18px' } : { fontWeight: 'bold', color:'#202b36' ,fontSize:'14px'}}>
                     {row.name}
                   </Typography>
                 </TableCell>
