@@ -29,6 +29,18 @@ export default function ConfirmationModal() {
   const [consultantId, setConsultantId] = useState(null); 
   const Navigate = useNavigate();
 
+
+  const [selected, setSelected] = useState('');
+  const [typeData, setTypeData] = useState([]);
+  const [typeDataId, setTypeDataId] = useState(null); 
+
+
+
+  const handleClick = (item) => {
+    setSelected(item.title);
+    setTypeDataId(item.id); 
+  };
+
   const handleSelectConsultant = (index) => {
     setSelectedConsultant(index);
     setConsultantId(consultantData[index].id); 
@@ -155,7 +167,7 @@ export default function ConfirmationModal() {
                 setSelectedOptions={setSelectedOptions}
               /> */
             ) : activeStep === 1 ? (
-              <ReservationType />
+              <ReservationType setTypeData={setTypeData} typeData={typeData} handleClick={handleClick} selected={selected}/>
             ) : activeStep === 2 ? (
               <ChoosingConsultant
                setConsultantData={setConsultantData}
@@ -165,9 +177,9 @@ export default function ConfirmationModal() {
                
               />
             ) : activeStep === 3 ? (
-              <ReservationTime consultantId={consultantId}/>
+              <ReservationTime consultantId={consultantId} consultantData={consultantData}/>
             ) : (
-              <ReservationInvoice />
+              <ReservationInvoice typeDataId={typeDataId} consultantData={consultantData} />
             )}
           </Typography>
 

@@ -18,17 +18,15 @@ export default function AppView() {
             total={15}
             color="success"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-
           />
         </Grid>
-
         <Grid xs={12} sm={6} md={3}>
 
           <AppWidgetSummary
             title="ثبت نام کنندگان"
             total={150}
             color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/icons8-checklist-64.png" />}
+            icon={<img alt="icon" src="/assets/icons/glass/team.png" />}
           />
         </Grid>
 
@@ -37,8 +35,7 @@ export default function AppView() {
             title="تعداد مشاوره های شما تا کنون "
             total={3}
             color="warning"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-          />
+            icon={<img alt="icon" src="/assets/icons/glass/checklist.png" />}          />
         </Grid>
 
         <Grid xs={12} sm={6} md={3}>

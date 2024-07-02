@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { Grid, styled, Typography, IconButton } from '@mui/material';
 
@@ -22,14 +24,11 @@ const StyledBox = styled(Grid)(({ selected }) => ({
   backgroundColor: selected ? '#e3f2fd' : '#ffffff',
   transition: 'all 0.3s ease',
   boxShadow: selected ? '0px 0px 20px rgba(0, 0, 0, 0.2)' : '0px 0px 10px rgba(0, 0, 0, 0.1)',
-  transform: selected ? 'scale(1.05)' : 'scale(1)',
   '&:hover': {
     transform: 'scale(1.05)',
     boxShadow: selected ? '0px 0px 20px rgba(0, 0, 0, 0.2)' : '0px 0px 15px #e1f5fe',
   },
 }));
-
-
 
 const TitleBox = styled(Grid)({
   display: 'flex',
@@ -39,13 +38,8 @@ const TitleBox = styled(Grid)({
   padding: '20px',
 });
 
-const ReservationType = () => {
+const ReservationType = ({ setTypeData, typeData, handleClick }) => {
   const [selected, setSelected] = useState('');
-  const [typeData, setTypeData] = useState([]);
-
-  const handleClick = (type) => {
-    setSelected(type);
-  };
 
   const fetchType = async () => {
     const token = getCookieValue('UID');
@@ -58,7 +52,8 @@ const ReservationType = () => {
       });
       setTypeData(response.data);
     } catch (error) {
-      console.log('Error fetching type data:', error);
+      console.error('Error fetching type data:', error);
+      // Optionally handle the error (e.g., set default typeData)
     }
   };
 
@@ -74,6 +69,11 @@ const ReservationType = () => {
   useEffect(() => {
     checkUID();
   }, []);
+
+  const handleBoxClick = (item) => {
+    setSelected(item.title);
+    handleClick(item);
+  };
 
   return (
     <Grid
@@ -98,7 +98,7 @@ const ReservationType = () => {
       </Grid>
       {typeData.map((item, index) => (
         <Grid key={index} item xs={12} sm={6} md={4}>
-          <StyledBox selected={selected === item.title} onClick={() => handleClick(item.title)}>
+          <StyledBox selected={selected === item.title} onClick={() => handleBoxClick(item)}>
             <IconButton>
               {item.icon ? (
                 <Iconify icon={item.icon} width={80} height={80} />
@@ -117,6 +117,12 @@ const ReservationType = () => {
       ))}
     </Grid>
   );
+};
+
+ReservationType.propTypes = {
+  setTypeData: PropTypes.func.isRequired,
+  typeData: PropTypes.array.isRequired,
+  handleClick: PropTypes.func.isRequired,
 };
 
 export default ReservationType;

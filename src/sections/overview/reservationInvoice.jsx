@@ -1,8 +1,10 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
+import axios from 'axios';
+import PropTypes from 'prop-types';
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
@@ -12,9 +14,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import { Button, Avatar, Divider, TextField, Typography } from '@mui/material';
 
+import { getCookieValue } from 'src/utils/cookie';
+
+import { Onrun } from 'src/api/onRun';
+
 import Iconify from 'src/components/iconify';
-
-
 
 const tableContainerStyle = {
   maxWidth: 900,
@@ -24,10 +28,7 @@ const tableContainerStyle = {
   borderRadius: '8px',
   marginTop: '20px',
   color: '#616161',
-  marginRight: window.innerWidth >= 1334 ? '12rem' : '0',
 };
-
-
 
 const lastRowStyle = {
   backgroundColor: '#e3f2fd',
@@ -37,9 +38,39 @@ function createData(name, content, isCodeValid = true) {
   return { name, content, isCodeValid };
 }
 
-const BasicTable = () => {
+const BasicTable = ({ typeDataId, consultantData }) => {
   const [discountCode, setDiscountCode] = useState('');
   const [isCodeValid, setIsCodeValid] = useState(null);
+  const [invoice, setInvoice] = useState();
+
+  const fetchTime = async () => {
+    const token = getCookieValue('UID');
+
+    try {
+      const response = await axios.get(`${Onrun}/api/perpay/${typeDataId}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setInvoice(response.data);
+    } catch (error) {
+      console.log('Error fetching time:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const checkUID = () => {
+    const uid = getCookieValue('UID');
+    console.log(uid);
+  };
+
+  useEffect(() => {
+    checkUID();
+  }, []);
 
   const handleCodeValidation = () => {
     if (discountCode.trim() === '') {
@@ -69,9 +100,9 @@ const BasicTable = () => {
   };
 
   const rows = [
-    createData('هزینه', 800000),
-    createData('تخفیف ویژه مشتریان', 800000),
-    createData('ارزش افزوده', 100000),
+    createData('هزینه', invoice ? invoice.price : '--'),
+    createData('تخفیف ویژه مشتریان', invoice ? invoice.off : '--'),
+    createData('ارزش افزوده', invoice ? invoice.tax : '--'),
     createData(
       'کد تخفیف',
       <>
@@ -84,51 +115,68 @@ const BasicTable = () => {
           helperText={isCodeValid === false ? 'کد تخفیف نامعتبر است' : ''}
         />
         <Button onClick={handleCodeValidation} variant="contained" style={buttonStyle}>
-          <Iconify  icon="gravity-ui:circle-check-fill" />
+          <Iconify icon="gravity-ui:circle-check-fill" />
         </Button>
       </>,
       isCodeValid
     ),
-    createData('مجموع', 0),
+    createData('مجموع', invoice ? invoice.pey : '--'),
   ];
 
   return (
-    <div style={{ margin: '20px'}}>
+    <div style={{ margin: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <Avatar
-          src="https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg"
-          sx={{ width: 120, height: 120 }}
-        />
+        <Avatar src={consultantData.avatar} sx={{ width: 120, height: 120 }} />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h5">آقای  زمانی</Typography>
+          <Typography variant="h5">{consultantData.name}</Typography>
           <Typography variant="body2" style={{ fontSize: '14px', color: '#666' }}>
-            متخصص مشاوره بورس و کارشناس تحلیل تکنیکال
+            {consultantData.specialty}
           </Typography>
-          
         </div>
       </div>
 
-      <TableContainer component={Paper}    style={tableContainerStyle}>
-        <div className='text-xl font-bold text-[#212b36]' style={headerText}>اطلاعات پرداخت</div>
-      <Divider/>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <TableContainer component={Paper} style={tableContainerStyle}>
+          <div className="text-xl font-bold text-[#212b36]" style={headerText}>
+            اطلاعات پرداخت
+          </div>
+          <Divider />
 
-        <Table aria-label="simple table">
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow  key={row.name} style={index === rows.length - 1 ? lastRowStyle : {}}>
-                <TableCell component="th" scope="row">
-                  <Typography variant="inherit" style={row.name === 'مجموع' ? { fontWeight: 'bold', color: '#212b36', fontSize: '18px' } : { fontWeight: 'bold', color:'#202b36' ,fontSize:'14px'}}>
-                    {row.name}
-                  </Typography>
-                </TableCell>
-                <TableCell align="center" style={{ fontWeight: 'bold',color:'#616161',fontSize:'16px'}}>{row.content}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          <Table aria-label="simple table" style={{}}>
+            <TableBody>
+              {rows.map((row, index) => (
+                <TableRow key={row.name} style={index === rows.length - 1 ? lastRowStyle : {}}>
+                  <TableCell component="th" scope="row">
+                    <Typography
+                      variant="inherit"
+                      style={
+                        row.name === 'مجموع'
+                          ? { fontWeight: 'bold', color: '#212b36', fontSize: '18px' }
+                          : { fontWeight: 'bold', color: '#202b36', fontSize: '14px' }
+                      }
+                    >
+                      {row.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ fontWeight: 'bold', color: '#616161', fontSize: '16px' }}
+                  >
+                    {row.content}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div>
   );
+};
+
+BasicTable.propTypes = {
+  typeDataId: PropTypes.string.isRequired,
+  consultantData: PropTypes.array.isRequired,
 };
 
 export default BasicTable;

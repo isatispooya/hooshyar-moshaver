@@ -9,19 +9,15 @@ import { getCookieValue } from 'src/utils/cookie';
 
 import { Onrun } from 'src/api/onRun';
 
-const ReservationTime = ({ consultantId }) => {
+const ReservationTime = ({ consultantId, consultantData }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [time, setTime] = useState([]);
 
-  const handleDayClick = (index) => {
-    setSelectedDay(index === selectedDay ? null : index);
-    setSelectedTime(null); // Reset selectedTime when changing the day
-  };
-
-  const handleTimeClick = (index) => {
-    setSelectedTime(index === selectedTime ? null : index);
-  };
+  useEffect(() => {
+    fetchTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchTime = async () => {
     const token = getCookieValue('UID');
@@ -38,19 +34,8 @@ const ReservationTime = ({ consultantId }) => {
     }
   };
 
-  useEffect(() => {
-    fetchTime();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const checkUID = () => {
-    const uid = getCookieValue('UID');
-    console.log(uid);
-  };
-
-  useEffect(() => {
-    checkUID();
-  }, []);
+  const findConsultantById = () =>
+    consultantData.find((consultant) => consultant.id === consultantId);
 
   const getPersianDay = (weekday) => {
     switch (weekday) {
@@ -73,16 +58,24 @@ const ReservationTime = ({ consultantId }) => {
     }
   };
 
+  const handleDayClick = (index) => {
+    setSelectedDay(index === selectedDay ? null : index);
+    setSelectedTime(null);
+  };
+
+  const handleTimeClick = (index) => {
+    setSelectedTime(index === selectedTime ? null : index);
+  };
+
   return (
     <div style={{ margin: '20px', fontFamily: 'Arial, sans-serif' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <Avatar
-          src="https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg"
-          sx={{ width: 120, height: 120 }}
-        />
+        <Avatar src={findConsultantById()?.profile_photo} sx={{ width: 120, height: 120 }} />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h5">آقای دکتر زمانی</Typography>
-          <Typography variant="body2">متخصص مشاوره بورس و کارشناس تحلیل تکنیکال</Typography>
+          <Typography variant="h5">
+            {findConsultantById()?.name} {findConsultantById()?.last_name}
+          </Typography>
+          <Typography variant="body2">{findConsultantById()?.postion}</Typography>
         </div>
       </div>
 
@@ -244,6 +237,7 @@ const ReservationTime = ({ consultantId }) => {
 
 ReservationTime.propTypes = {
   consultantId: PropTypes.string.isRequired,
+  consultantData: PropTypes.array.isRequired,
 };
 
 export default ReservationTime;
