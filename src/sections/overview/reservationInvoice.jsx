@@ -100,7 +100,7 @@ const BasicTable = () => {
           sx={{ width: 120, height: 120 }}
         />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h5">آقای دکتر زمانی</Typography>
+          <Typography variant="h5">آقای  زمانی</Typography>
           <Typography variant="body2" style={{ fontSize: '14px', color: '#666' }}>
             متخصص مشاوره بورس و کارشناس تحلیل تکنیکال
           </Typography>
