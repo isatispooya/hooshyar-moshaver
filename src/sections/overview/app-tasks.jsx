@@ -24,6 +24,7 @@ import { Chip, Avatar, Divider, CardHeader } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
 
+// request 'http://192.168.62.106:8000'
 import { Onrun } from 'src/api/onRun';
 
 import Iconify from 'src/components/iconify';
@@ -36,7 +37,7 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [list, setList] = useState([]);
-
+// گرفتن لیست مشتریان
   const fetchConsultant = async () => {
     const token = getCookieValue('UID');
 

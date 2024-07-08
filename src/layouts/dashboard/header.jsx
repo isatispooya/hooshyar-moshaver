@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,9 +13,9 @@ import { setCookieValue } from 'src/utils/cookie';
 import Iconify from 'src/components/iconify';
 
 import AccountPopover from './common/account-popover';
-
+// header
 export default function Header() {
-  // eslint-disable-next-line no-unused-vars
+
   const [open, setOpen] = useState(null);
   const navigate = useNavigate();
 
@@ -61,6 +63,7 @@ export default function Header() {
           >
             خروج
           </Button>
+          {/* موبایل header */}
           <Button
             onClick={() => setOpen(true)}
             sx={{
