@@ -11,7 +11,6 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import Rating from '@mui/material/Rating';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,7 +20,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
-import { Chip, Avatar, Divider, TextField, CardHeader } from '@mui/material';
+import { Chip, Avatar, Divider, CardHeader } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
 
@@ -221,7 +220,7 @@ AnalyticsTasks.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function TaskItem({ task, list, checked, onDelete, onView }) {
+function TaskItem({ task, list, onView }) {
   const isComplating = list.status === 'complating';
   console.log(list, list);
   console.log(task, task);
@@ -365,7 +364,7 @@ function ViewModal({ open, onClose, task }) {
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
           <Avatar
-            src="https://media.khabaronline.ir/d/2020/10/28/3/5482312.jpg"
+            src={`${Onrun}/${task.consultant_photo}`}
             alt="مشاور"
             sx={{ width: 100, height: 100, mr: 2 }}
           />
@@ -377,7 +376,10 @@ function ViewModal({ open, onClose, task }) {
           نوع مشاوره: {task.kind}
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          تاریخ و ساعت مشاوره: {task.date}
+          تاریخ  {task.date}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+           ساعت مشاوره: {task.time}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <Chip

@@ -47,7 +47,7 @@ export default function Header() {
             sx={{
               bgcolor: '#e3f2fd',
               color: '#1f8dea', 
-              '@media (max-width: 600px)': {
+              '@media (max-width: 900px)': {
                 fontSize: '0.8rem',
                 padding: '8px 12px',
                 display: 'none',

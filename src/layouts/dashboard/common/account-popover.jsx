@@ -11,19 +11,14 @@ import {
   Box,
   Avatar,
   Popover,
-  Divider,
-  MenuItem,
   Typography,
   IconButton,
-  ListItemIcon,
 } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
-
 import { Onrun } from 'src/api/onRun';
 import { account } from 'src/_mock/account';
 
-import Iconify from 'src/components/iconify';
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
@@ -104,7 +99,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.photoURL}
+          src={`${Onrun}/${profile.profile_photo}`}
           alt={account.displayName}
           sx={{
             width: 40,
@@ -138,10 +133,9 @@ export default function AccountPopover() {
         <Box sx={{ my: 2, px: 2, direction: 'ltr' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', pb: 2 }}>
             <Avatar
-              sx={{ bgcolor: 'pink', width: 56, height: 56, mr: 2 }}
-            >
-              {profile.name ? profile.name.charAt(0) : 'null'}
-            </Avatar>
+              src={`${Onrun}/${profile.profile_photo}`}
+              sx={{ width: 56, height: 56, mr: 2 }}
+             />
             <Box>
               <Typography variant="body1" fontWeight="bold">
                 {profile.name || 'نام نامشخص'}{' '}

@@ -66,7 +66,7 @@ export default function CalendarTime() {
 
     const deletTime = async (date, time) => {
         console.log(date, time);
-        
+
         axios.delete(`${Onrun}/api/delete/settime/?date=${date}&time=${time} `, {
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -79,10 +79,10 @@ export default function CalendarTime() {
                 console.log(error);
             })
     };
-    
-   
-   
-    
+
+
+
+
 
     return (
         <div className='md:flex md:flex-col grid grid-row-1 justify-center items-center md:mt-4'>
@@ -104,34 +104,35 @@ export default function CalendarTime() {
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col mb-2 h-[570px] overflow-y-scroll justify-evenly items-center md:mt-0 mt-8 w-72 md:w-96 rounded-lg shadow-md shadow-[#6390ba] bg-white'>
-                    <h className='flex text-xl  font-bold items-center text-[#49a8f5] justify-center bg-[#e3f2fd] p-2 rounded-2xl m-2 md:w-80 w-60 sticky top-4'>
-                        برنامه کاری
-                    </h>
-                
-                 
-                        {timeData.length > 0 && timeData.map((item) => (
-                            item.time.map((jitem,index) => (
-                                <div key={jitem.time} className='flex border-[1px] mb-2 p-1 items-center  rounded-md w-40' >
-                                    <div className='flex  gap-2'>
-                                        <p>{item.jalali}</p>
-                                        <div className="border-l h-auto border-gray-400" />
-                                        <p>{jitem.time}</p>
+                <div className='flex space-y-80'>
+                    <div className='flex  flex-col  mb-2 h-[570px] overflow-y-scroll justify-evenly items-center md:mt-0 mt-8 w-72 md:w-96 rounded-lg shadow-md shadow-[#6390ba] bg-white'>
+                        <div className='  flex text-xl font-bold items-center text-[#49a8f5] justify-center bg-[#e3f2fd] p-2 rounded-2xl m-2 md:w-80 w-60 sticky top-4'>
+                            برنامه کاری
+                        </div>
+                        <div className=' h-[500px]'>
+                            {timeData.length > 0 && timeData.map((item, i) => (
+                                item.time.map((jitem, index) => (
+                                    <div
+                                        key={jitem.time}
+                                        className='flex border-[1px] mb-2 p-1 items-center rounded-md w-40'
+                                    >
+                                        <div className='flex gap-2'>
+                                            <p>{item.jalali}</p>
+                                            <div className="border-l h-auto border-gray-400" />
+                                            <p>{jitem.time}</p>
+                                        </div>
+                                        {jitem.reserve ? (
+                                            <Iconify className='text-[#1e89e5] ml-2' icon="material-symbols:check-box-outline-rounded" width="2rem" height="2rem" />
+                                        ) : (
+                                            <Iconify onClick={() => deletTime(item.date, jitem.time)} className='text-red-700 ml-2' icon="material-symbols:cancel-presentation-outline" width="2rem" height="2rem" />
+                                        )}
                                     </div>
-                                    {jitem.reserve ? (
-                                        <Iconify className='text-[#1e89e5] ml-2' icon="material-symbols:check-box-outline-rounded" width="2rem" height="2rem" />
-                                    ) : (
-                                            <Iconify onClick={() => deletTime(item.date,jitem.time)} className='text-red-700 ml-2' icon="material-symbols:cancel-presentation-outline" width="2rem" height="2rem" />
-                                    )}
-                                </div>
-                            ))
-                        ))}
-                    
-               
+                                ))
+                            ))}
+                        </div>
+                    </div>
+               </div>
 
-                 
-
-                </div>
             </div>
             <div className='flex justify-between w-full max-w-5xl mt-4'>
                 <button

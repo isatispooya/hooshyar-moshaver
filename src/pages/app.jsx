@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title>   پنل مشاوران بورس</title>
       </Helmet>
 
       <AppView />

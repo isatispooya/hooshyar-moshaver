@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title > Login | Minimal UI </title>
+        <title >   پنل مشاوران بورس </title>
       </Helmet>
 
       <LoginView />
