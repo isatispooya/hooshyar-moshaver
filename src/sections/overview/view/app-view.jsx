@@ -28,34 +28,32 @@ export default function AppView() {
     if (!token) {
       navigate('/login');
     } else {
-      navigate('/')
+     
+      const fetchProfile = async () => {
+        try {
+          const response = await axios.get(`${Onrun}/api/consultant/profile`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setProfile(response.data);
+          setModalOpen(true);
+        } catch (error) {
+          if (error.response) {
+            if (error.response.status === 401 || error.response.status === 500) {
+              setCookieValue('UID', '');
+              navigate('/login');
+            } else {
+              setError(error.response.data.message || error.message || 'خطا');
+            }
+          } else {
+            setError('اینترنت خود را چک کنید');
+          }
+        }
+      };
+      fetchProfile();
     }
-  })
-  //     const fetchProfile = async () => {
-  //       try {
-  //         const response = await axios.get(`${Onrun}/api/user/profile/`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-  //         setProfile(response.data);
-  //         setModalOpen(true);
-  //       } catch (error) {
-  //         if (error.response) {
-  //           if (error.response.status === 401 || error.response.status === 500) {
-  //             setCookieValue('UID', '');
-  //             navigate('/login');
-  //           } else {
-  //             setError(error.response.data.message || error.message || 'خطا');
-  //           }
-  //         } else {
-  //           setError('اینترنت خود را چک کنید');
-  //         }
-  //       }
-  //     };
-  //     fetchProfile();
-  //   }
-  // }, [token, navigate]);
+  }, [token, navigate]);
 
   return (
     <Container maxWidth="xl">

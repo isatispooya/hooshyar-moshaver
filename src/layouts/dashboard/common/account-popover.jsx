@@ -40,7 +40,7 @@ export default function AccountPopover() {
       const token = getCookieValue('UID');
       console.log(token);
 
-      const response = await axios.get(`${Onrun}/api/user/profile/`, {
+      const response = await axios.get(`${Onrun}/api/consultant/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -148,26 +148,12 @@ export default function AccountPopover() {
                 {profile.last_name || 'نام خانوادگی نامشخص'}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {profile.mobile || 'شماره تلفن نامشخص'}
+                {profile.phone || 'شماره تلفن نامشخص'}
               </Typography>
-               <Typography variant="body2" color="text.secondary">
-               {profile.email || 'ایمیل نامشخص'}
-             </Typography>
+            
             </Box>
           </Box>
-          <Divider />
-          <MenuItem onClick={() => navigate('/edit')}>
-            <ListItemIcon>
-              <Iconify icon="material-symbols:person-edit-rounded"/>
-            </ListItemIcon>
-          ویرایش 
-          </MenuItem>
-          <MenuItem onClick={() => navigate('/TransactionHistory')}>
-            <ListItemIcon>
-              <Iconify icon="gravity-ui:circle-dollar"/>
-            </ListItemIcon>
-          لیست تراکنش های من
-          </MenuItem>
+     
         
         </Box>
       </Popover>
