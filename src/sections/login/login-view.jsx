@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+// import calender
 import DatePicker from 'react-multi-date-picker';
 import React, { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
@@ -20,6 +21,7 @@ import { Grid, Button, Tooltip, Skeleton } from '@mui/material';
 
 import { getCookieValue, setCookieValue } from 'src/utils/cookie';
 
+// request 'http://192.168.62.106:8000'
 import { Onrun } from 'src/api/onRun';
 import { bgGradient } from 'src/theme/css';
 
@@ -41,6 +43,7 @@ export default function LoginView() {
   const [secondForm, setSecondForm] = useState(false);
   const [thirdForm, setThirdForm] = useState(false);
 
+  // get captcha
   const fetchCaptcha = async () => {
     setIsLoadingCaptcha(true);
     try {
@@ -54,7 +57,7 @@ export default function LoginView() {
       setIsLoadingCaptcha(false);
     }
   };
-
+// دریافت کد تائیئد
   const handleClick = async () => {
     try {
       const response = await axios.post(`${Onrun}/api/otp/consultant/`, {
@@ -99,7 +102,7 @@ export default function LoginView() {
   
 
   
-  
+  //  ساختن body ارسال فرم ثبت نام
   const signupClick = async () => {
     try {
       const response = await axios.post(`${Onrun}/api/signup/`, {
@@ -125,7 +128,7 @@ export default function LoginView() {
     const formattedDate = value.format('YYYY-MM-DD');
     setBritDate(formattedDate);
   };
-
+// چک کردن آیدی
   const checkUID = () => {
     const uid= getCookieValue('UID');
     console.log(uid);
