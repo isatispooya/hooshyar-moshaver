@@ -57,7 +57,7 @@ export default function LoginView() {
 
   const handleClick = async () => {
     try {
-      const response = await axios.post(`${Onrun}/api/otp/`, {
+      const response = await axios.post(`${Onrun}/api/otp/consultant/`, {
         mobile: mobileNumber,
         captcha: captchaLogin,
         encrypted_response: captchaData.encrypted_response,
@@ -83,7 +83,7 @@ export default function LoginView() {
   };
   const loginClick = async () => {
     try {
-      const sendApiCode = await axios.post(`${Onrun}/api/login/`, {
+      const sendApiCode = await axios.post(`${Onrun}/api/login/consultant/`, {
         mobile: mobileNumber,
         code: codeNumber,
       });

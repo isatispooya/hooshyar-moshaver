@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable array-callback-return */
+import axios from 'axios';
 /* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,15 +23,39 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import { Chip, Avatar, Divider, TextField, CardHeader } from '@mui/material';
 
+import { getCookieValue } from 'src/utils/cookie';
+
+import { Onrun } from 'src/api/onRun';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function AnalyticsTasks({ title, subheader, list, ...other }) {
+export default function AnalyticsTasks({ title, subheader, ...other }) {
   const [selected, setSelected] = useState(['2']);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [list, setList] = useState([]);
+
+  const fetchConsultant = async () => {
+    const token = getCookieValue('UID');
+
+    try {
+      const response = await axios.get(`${Onrun}/api/visit/consultations/list/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setList(response.data);
+    } catch (error) {
+      console.log('Error fetching consultant data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchConsultant();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -66,19 +93,32 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
         borderRadius: 2,
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
         backgroundColor: '#f9f9f9',
-
       }}
       dir="rtl"
     >
-      <CardHeader
-        sx={{
-          mb: 3,
-          textAlign: 'center',
-          fontSize: '1.8rem',
-        }}
-        title="مشاوره های شما"
-      />
-      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto', }}>
+      <div className='flex  justify-between mb-8 md:m-4'>
+        <CardHeader
+          sx={{
+            mb: 3,
+            textAlign: 'center',
+            fontSize: '1rem',
+          }}
+          title='برنامه کاری شما'
+        />
+        <Box className='mt-4' >
+          <Button
+            variant="contained"
+            disableElevation
+            onClick={() => navigate('/date')}
+          
+
+          >
+            <Iconify className="ml-2 " icon="material-symbols:checkbook-outline-rounded" width="1.2rem" height="1.2rem" />
+            برنامه کاری
+          </Button>
+        </Box>
+      </div>
+      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto' }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: '#64b5f6' }}>
             <TableRow>
@@ -89,7 +129,7 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
                   color: '#555555',
                 }}
               >
-                نام مشاور
+                نام مشتری
               </TableCell>
               <TableCell
                 sx={{
@@ -130,17 +170,28 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
             </TableRow>
           </TableHead>
 
-          <TableBody style={{borderRight:'5px solid green'}}>
-            {list.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                checked={selected.includes(task.id)}
-                onClickComplete={() => handleClickComplete(task.id)}
-                onDelete={() => handleDelete(task.id)}
-                onView={() => handleView(task.id)}
-              />
-            ))}
+          <TableBody
+            style={{ borderRight: `5px solid ${list.status === 'done' ? 'blue' : 'green'}` }}
+          >
+            {list.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  اطلاعاتی موجود نمیباشد {' '}
+                </TableCell>
+              </TableRow>
+            ) : (
+              list.map((task) => (
+                <TaskItem
+                  key={task.id}
+                  task={task}
+                  list={list}
+                  checked={selected.includes(task.id)}
+                  onClickComplete={() => handleClickComplete(task.id)}
+                  onDelete={() => handleDelete(task.id)}
+                  onView={() => handleView(task.id)}
+                />
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -154,29 +205,10 @@ export default function AnalyticsTasks({ title, subheader, list, ...other }) {
       <ViewModal
         open={viewModalOpen}
         onClose={() => setViewModalOpen(false)}
-        taskId={selectedTask}
-        tasks={list}
+        task={list.find((item) => item.id === selectedTask)}
       />
 
-      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-        <Button
-          variant="contained"
-          disableElevation
-          onClick={handleConsultant}
-          sx={{
-            backgroundColor: '#1976d2',
-            color: '#ffffff',
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            textTransform: 'none',
-            borderRadius: 'px',
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-            '&:hover': { backgroundColor: '#42a5f5' },
-          }}
-        >
-          <Iconify icon="gravity-ui:plus" sx={{ mr: 1 }} /> دریافت مشاوره
-        </Button>
-      </Box>
+     
     </Card>
   );
 }
@@ -189,7 +221,12 @@ AnalyticsTasks.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function TaskItem({ task, checked, onDelete, onView }) {
+function TaskItem({ task, list, checked, onDelete, onView }) {
+  const isComplating = list.status === 'complating';
+  console.log(list, list);
+  console.log(task, task);
+
+
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -208,21 +245,28 @@ function TaskItem({ task, checked, onDelete, onView }) {
   return (
     <TableRow
       sx={{
-        border:'2px solid #e0e0e0',
+        border: '2px solid #e0e0e0',
         '&:hover': { backgroundColor: '#f5f5f5' },
       }}
     >
-      <TableCell>{task.name}</TableCell>
-      <TableCell>{task.type}</TableCell>
-      <TableCell style={{ color: 'green' ,display:'flex',marginRight:'20px'}}>
-      <Iconify icon="gravity-ui:circle-check"/>      </TableCell>
-      <TableCell>{task.date}</TableCell>
-      <TableCell>
-        
-          <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
-            <Iconify  icon="eva:more-vertical-fill" />
-          </IconButton>
+      <React.Fragment key={task.id}>
+        <TableCell>{task.consultant}</TableCell>
+        <TableCell>{task.kind}</TableCell>
+        <TableCell style={{ display: 'flex', marginRight: '20px', alignItems: 'center' }}>
+          {task.status ? (
+            <Iconify icon="mdi:perimeter" style={{ color: 'green' }} />
+          ) : (
+            <Iconify icon="gravity-ui:circle-check" style={{ color: 'blue' }} />
+          )}
+        </TableCell>
+        <TableCell>{task.date}</TableCell>
+      </React.Fragment>
 
+
+      <TableCell>
+        <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
         <Popover
           open={!!openMenu}
           anchorEl={openMenu}
@@ -230,18 +274,11 @@ function TaskItem({ task, checked, onDelete, onView }) {
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <MenuItem onClick={onView}>
+          <MenuItem onClick={() => onView(list.id)}>
             <Iconify icon="gravity-ui:chevrons-expand-up-right" sx={{ mr: 2 }} />
             مشاهده
           </MenuItem>
-          <MenuItem onClick={handleShare}>
-            <Iconify icon="solar:share-bold" sx={{ mr: 2 }} />
-            اشتراک گذاری
-          </MenuItem>
-          <MenuItem onClick={onDelete} sx={{ color: 'error.main' }}>
-            <Iconify icon="solar:trash-bin-trash-bold" sx={{ mr: 2 }} />
-            لغو
-          </MenuItem>
+         
         </Popover>
       </TableCell>
     </TableRow>
@@ -290,9 +327,11 @@ function DeleteConfirmationModal({ open, onClose, onConfirm }) {
   );
 }
 
-function ViewModal({ open, onClose, taskId, tasks }) {
-  const task = tasks.find((item) => item.id === taskId);
+function ViewModal({ open, onClose, task }) {
   const [starValue, setStarValue] = useState([]);
+
+  if (!task) return null;
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -331,54 +370,36 @@ function ViewModal({ open, onClose, taskId, tasks }) {
             sx={{ width: 100, height: 100, mr: 2 }}
           />
           <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '18px' }}>
-            اقای دکتر محمد زمانی
+            {task.consultant}{' '}
           </Typography>
         </Box>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          نوع مشاوره: {task ? task.type : ''}
+          نوع مشاوره: {task.kind}
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          تاریخ و ساعت مشاوره: 12/6/1403 12:30
+          تاریخ و ساعت مشاوره: {task.date}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <Chip
-            icon={<Iconify icon="gravity-ui:circle-check-fill" />}
-            label="تکمیل شده"
-            color="success"
-            sx={{ fontSize: '14px', bgcolor: '#D7ECD9', color: '#4CAF50' }}
-          />
+            <Chip
+              icon={task.status === 'done' ? <Iconify icon="gravity-ui:circle-check-fill" /> : <Iconify icon="mdi:perimeter" />}
+              label={task.status === 'done' ? 'تکمیل شد' : 'درحال اجرا'}
+              color={task.status === 'done' ? "info" : "success"}
+              sx={{ fontSize: '14px', bgcolor: '#D7ECD9', color: '#4CAF50' }}
+            />
         </Box>
-        <Divider sx={{ mb: 2, mt: 2 }} />
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          لطفاً به اقای دکتر محمد زمانی امتیاز دهید:
-        </Typography>
-        <Rating
-          name="simple-controlled"
-          value={starValue}
-          onChange={(newValue) => {
-            setStarValue(newValue);
-          }}
-          size="large"
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          id="outlined-basic"
-          label="نظر"
-          variant="outlined"
-          fullWidth
-          multiline
-          rows={3}
-          sx={{ mb: 3 }}
-        />
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button
-            variant="contained"
-            onClick={onClose}
-            sx={{ bgcolor: '#1976D2', color: '#FFFFFF', px: 4 }}
-          >
-            بستن
-          </Button>
-        </Box>
+        {task.status === 'completing' && (
+          <Box>
+            <Divider sx={{ mb: 2, mt: 2 }} />
+              <Button
+                variant="contained"
+                onClick={onClose}
+                sx={{ bgcolor: '#1976D2', color: '#FFFFFF', px: 4 }}
+              >
+                بستن
+              </Button>
+  
+          </Box>
+        )}
       </Box>
     </Modal>
   );

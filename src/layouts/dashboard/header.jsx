@@ -65,14 +65,21 @@ export default function Header() {
             onClick={() => setOpen(true)}
             sx={{
               bgcolor: '#e3f2fd',
+              color: '#1f8dea', 
               display: { xs: 'inline-flex', md: 'none' },
               '@media (max-width: 600px)': {
                 fontSize: '0.8rem',
                 padding: '8px 12px',
               },
+              '&:hover': {
+                color: '#fff',
+                bgcolor: '#1f8dea',
+              },
             }}
+            endIcon={<Iconify icon="gravity-ui:arrow-right-to-square" />}
           >
-            <Iconify icon="eva:menu-outline" />
+            
+            خروج
           </Button>
         </Toolbar>
       </AppBar>

@@ -1,5 +1,12 @@
+/* eslint-disable no-shadow */
+import { useState, useEffect  } from 'react';
+/* eslint-disable no-undef */
+import { useNavigate } from 'react-router-dom';
+
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
+
+import { getCookieValue } from 'src/utils/cookie';
 
 import Iconify from 'src/components/iconify';
 
@@ -9,6 +16,47 @@ import AppWidgetSummary from '../app-widget-summary';
 // ----------------------------------------------------------------------
 
 export default function AppView() {
+  const navigate = useNavigate();
+  const token = getCookieValue ('UID');
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+
+  useEffect(() => {
+
+    if (!token) {
+      navigate('/login');
+    } else {
+      navigate('/')
+    }
+  })
+  //     const fetchProfile = async () => {
+  //       try {
+  //         const response = await axios.get(`${Onrun}/api/user/profile/`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
+  //         setProfile(response.data);
+  //         setModalOpen(true);
+  //       } catch (error) {
+  //         if (error.response) {
+  //           if (error.response.status === 401 || error.response.status === 500) {
+  //             setCookieValue('UID', '');
+  //             navigate('/login');
+  //           } else {
+  //             setError(error.response.data.message || error.message || 'خطا');
+  //           }
+  //         } else {
+  //           setError('اینترنت خود را چک کنید');
+  //         }
+  //       }
+  //     };
+  //     fetchProfile();
+  //   }
+  // }, [token, navigate]);
+
   return (
     <Container maxWidth="xl">
       <Grid container spacing={3}>
