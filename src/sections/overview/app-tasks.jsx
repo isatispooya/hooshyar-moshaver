@@ -32,14 +32,15 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function AnalyticsTasks({ title, subheader, ...other }) {
-  const [selected, setSelected] = useState(['2']);
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [list, setList] = useState([]);
-// گرفتن لیست مشتریان
+  const [selected, setSelected] = useState(['2']); // حالت برای نگهداری آیتم‌های انتخاب شده
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false); // حالت برای باز یا بسته بودن مودال تایید حذف
+  const [viewModalOpen, setViewModalOpen] = useState(false); // حالت برای باز یا بسته بودن مودال مشاهده
+  const [selectedTask, setSelectedTask] = useState(null); // حالت برای نگهداری تسک انتخاب شده
+  const [list, setList] = useState([]); // حالت برای نگهداری لیست تسک‌ها
+
+  // تابع برای گرفتن لیست مشتریان
   const fetchConsultant = async () => {
-    const token = getCookieValue('UID');
+    const token = getCookieValue('UID'); // گرفتن توکن از کوکی
 
     try {
       const response = await axios.get(`${Onrun}/api/visit/consultations/list/`, {
@@ -47,41 +48,46 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      setList(response.data);
+      setList(response.data); // ذخیره داده‌ها در حالت لیست
     } catch (error) {
-      console.log('Error fetching consultant data:', error);
+      console.log('Error fetching consultant data:', error); // نمایش خطا در صورت عدم موفقیت
     }
   };
 
   useEffect(() => {
-    fetchConsultant();
+    fetchConsultant(); // فراخوانی تابع fetchConsultant در زمان لود کامپوننت
   }, []);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // استفاده از هوک useNavigate برای مسیریابی
 
+  // تابع برای مدیریت کلیک تکمیل تسک
   const handleClickComplete = (taskId) => {
     const tasksCompleted = selected.includes(taskId)
       ? selected.filter((value) => value !== taskId)
       : [...selected, taskId];
 
-    setSelected(tasksCompleted);
+    setSelected(tasksCompleted); // به روز رسانی حالت selected
   };
 
+  // تابع برای مدیریت حذف تسک
   const handleDelete = (taskId) => {
-    setSelectedTask(taskId);
-    setConfirmDeleteOpen(true);
+    setSelectedTask(taskId); // تنظیم تسک انتخاب شده
+    setConfirmDeleteOpen(true); // باز کردن مودال تایید حذف
   };
 
+  // تابع برای تایید حذف تسک
   const handleConfirmDelete = () => {
-    console.info('DELETE', selectedTask);
-    setConfirmDeleteOpen(false);
+    console.info('DELETE', selectedTask); // نمایش پیام در کنسول
+    setConfirmDeleteOpen(false); // بستن مودال تایید حذف
   };
 
+  // تابع برای مشاهده جزئیات تسک
   const handleView = (taskId) => {
-    setSelectedTask(taskId);
-    setViewModalOpen(true);
+    setSelectedTask(taskId); // تنظیم تسک انتخاب شده
+    setViewModalOpen(true); // باز کردن مودال مشاهده
   };
 
+  // تابع برای مسیریابی به صفحه رزرو مشاور
   const handleConsultant = () => {
     navigate('/ConsultantReservation', { replace: true });
   };
@@ -94,24 +100,22 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
         backgroundColor: '#f9f9f9',
       }}
-      dir="rtl"
+      dir="rtl" // تنظیم جهت به راست
     >
-      <div className='flex  justify-between mb-8 md:m-4'>
+      <div className='flex justify-between mb-8 md:m-4'>
         <CardHeader
           sx={{
             mb: 3,
             textAlign: 'center',
             fontSize: '1rem',
           }}
-          title='برنامه کاری شما'
+          title='برنامه کاری شما' // عنوان برنامه کاری شما
         />
         <Box className='mt-4' >
           <Button
             variant="contained"
             disableElevation
-            onClick={() => navigate('/date')}
-          
-
+            onClick={() => navigate('/date')} // مسیریابی به صفحه تقویم
           >
             <Iconify className="ml-2 " icon="material-symbols:checkbook-outline-rounded" width="1.2rem" height="1.2rem" />
             برنامه کاری
@@ -170,9 +174,7 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
             </TableRow>
           </TableHead>
 
-          <TableBody
-            style={{ borderRight: `5px solid ${list.status === 'done' ? 'blue' : 'green'}` }}
-          >
+          <TableBody>
             {list.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} align="center">
@@ -218,21 +220,22 @@ AnalyticsTasks.propTypes = {
   subheader: PropTypes.string,
   title: PropTypes.string,
 };
-
 // ----------------------------------------------------------------------
 
+// کامپوننت TaskItem برای نمایش یک ردیف از تسک‌ها
 function TaskItem({ task, list, onView }) {
   const isComplating = list.status === 'complating';
   console.log(list, list);
   console.log(task, task);
 
+  const [openMenu, setOpenMenu] = useState(null); // حالت برای باز یا بسته بودن منوی پاپ‌اور
 
-  const [openMenu, setOpenMenu] = useState(null);
-
+  // تابع برای باز کردن منوی پاپ‌اور
   const handleOpenMenu = (event) => {
     setOpenMenu(event.currentTarget);
   };
 
+  // تابع برای بستن منوی پاپ‌اور
   const handleCloseMenu = () => {
     setOpenMenu(null);
   };

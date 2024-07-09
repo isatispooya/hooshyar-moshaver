@@ -38,20 +38,34 @@ export default function LoginView() {
   // فرم login
   const [firstForm, setfirstForm] = useState(true);
 
-  // get captcha
+
+  // برای گرفتن کپچا در ورود
   const fetchCaptcha = async () => {
     setIsLoadingCaptcha(true);
     try {
       const response = await axios.get(`${Onrun}/api/captcha/`);
-      console.log('Captcha response:', response);
       setCaptchaData(response.data);
     } catch (error) {
       console.error('Error fetching captcha:', error);
-      toast.error('خطا در ارسال کپچا');
+
+      if (error.response) {
+        console.error('Server response:', error.response.data);
+        const errorMessage = error.response.data.message;
+        toast.error(`خطا در ارسال کپچا: ${errorMessage}`);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        toast.error('خطا در ارسال کپچا ');
+      } else {
+        console.error('Error setting up request:', error.message);
+        toast.error(`خطا در ارسال کپچا: ${error.message}`);
+      }
     } finally {
       setIsLoadingCaptcha(false);
     }
   };
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
   // دریافت کد تائید
   const handleClick = async () => {
     try {
@@ -83,7 +97,7 @@ export default function LoginView() {
         mobile: mobileNumber,
         code: codeNumber,
       });
-
+      // ست کردن کوکی
       setCookieValue('UID', sendApiCode.data.access);
 
       navigate('/');
@@ -103,7 +117,7 @@ export default function LoginView() {
     setSecondForm(false);
     setfirstForm(true);
   };
-
+// کوکی را چک
   useEffect(() => {
     checkUID();
   }, []);
