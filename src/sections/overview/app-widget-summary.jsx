@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { fShortenNumber } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
-
+// ساخت باکس های بالای صفحه پنل مشاوره
 export default function AppWidgetSummary({ title, total, icon, color = 'primary', sx, ...other }) {
   return (
     <Card

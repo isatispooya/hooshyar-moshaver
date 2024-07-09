@@ -29,7 +29,7 @@ export default function AppView() {
   const [cardBox, setCardBox] = useState('');
 
   const token = getCookieValue('UID');
-
+// چک میشه اگر توکن کاربر وجود داشته باشه تو صفحه می مونه در غیر این صورت  وارد صفحه ورود میشه
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -98,7 +98,7 @@ export default function AppView() {
     setCookieValue('UID', '');
     navigate('/login');
   };
-
+// مقادیر توی باکس  بالای صفحه پنل مشاور را از بک اند دریافت میکنه
   const fetchWidgetSummary = async () => {
     const token = getCookieValue('UID');
 

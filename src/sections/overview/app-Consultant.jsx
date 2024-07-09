@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+// استفاده از تقویم جلالی
 import { Calendar } from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
@@ -10,11 +11,12 @@ import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
 import { getCookieValue } from 'src/utils/cookie';
 
+// request 'http://192.168.62.106:8000'
 import { Onrun } from 'src/api/onRun';
 
 import Iconify from 'src/components/iconify';
 
-
+// ست کردن تاریخ و ساعت و وضعیت ساعت مشاوره
 export default function CalendarTime() {
     const [selectedDates, setSelectedDates] = useState(new Date());
     const [submissionStatus, setSubmissionStatus] = useState('');
@@ -30,7 +32,7 @@ export default function CalendarTime() {
         setSelectedDates(dates);
     };
     const token = getCookieValue('UID');
-
+// ارسال زمان ست شده توسط مشاوره به بک اند
     const fetchTime = async () => {
         try {
             const response = await axios.post(
@@ -50,7 +52,7 @@ export default function CalendarTime() {
             }
         }
     };
-
+// دریافت زمان ست شده توسط مشاوره از بک اند
     const getTime = async () => {
 
         axios.get(`${Onrun}/api/selecttime/consultant/`, { headers: { Authorization: `Bearer ${token}` }, })
@@ -63,7 +65,7 @@ export default function CalendarTime() {
             })
     };
     useEffect(getTime, []);
-
+// دکمه حذف ساعت مشاوره 
     const deletTime = async (date, time) => {
         console.log(date, time);
 

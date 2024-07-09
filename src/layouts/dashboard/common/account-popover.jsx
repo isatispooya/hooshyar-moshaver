@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
+// request 'http://192.168.62.106:8000'
 import { Onrun } from 'src/api/onRun';
 import { account } from 'src/_mock/account';
 
@@ -29,7 +30,7 @@ export default function AccountPopover() {
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-
+// گرفتن اطلاعات مشاوره از بک اند
   const fetchProfile = async () => {
     try {
       const token = getCookieValue('UID');
@@ -85,6 +86,7 @@ export default function AccountPopover() {
 
   return (
     <>
+      {/* پروفایل کاربر */}
       <IconButton
         onClick={handleOpen}
         sx={{

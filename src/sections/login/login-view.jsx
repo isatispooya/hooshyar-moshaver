@@ -29,20 +29,14 @@ export default function LoginView() {
   const [mobileNumber, setMobileNumber] = useState('');
   const [captchaLogin, setCaptchaLogin] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [nationalCode, setNationalCode] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
-  const [userName, setUserName] = useState('');
-  const [passwordd, setPassword] = useState('');
-  const [britDate, setBritDate] = useState('');
+
   const navigate = useNavigate();
   const [isLoadingCaptcha, setIsLoadingCaptcha] = useState(true);
   const [captchaData, setCaptchaData] = useState(null);
-
+  // فرم دریافت کد تائید
   const [secondForm, setSecondForm] = useState(false);
+  // فرم login
   const [firstForm, setfirstForm] = useState(true);
-  const [thirdForm, setThirdForm] = useState(false);
 
   // get captcha
   const fetchCaptcha = async () => {
@@ -58,7 +52,7 @@ export default function LoginView() {
       setIsLoadingCaptcha(false);
     }
   };
-  // دریافت کد تائیئد
+  // دریافت کد تائید
   const handleClick = async () => {
     try {
       const response = await axios.post(`${Onrun}/api/otp/consultant/`, {
@@ -70,11 +64,9 @@ export default function LoginView() {
 
       console.log('response.data.registered', response.data.registered);
       if (response.data.registered === false) {
-        setThirdForm(true);
         setSecondForm(false);
       } else {
         setSecondForm(true);
-        setThirdForm(false);
       }
     } catch (error) {
       if (error.response) {
@@ -101,41 +93,14 @@ export default function LoginView() {
     }
   };
 
-  //  ساختن body ارسال فرم ثبت نام
-  const signupClick = async () => {
-    try {
-      const response = await axios.post(`${Onrun}/api/signup/`, {
-        mobile: mobileNumber,
-        username: userName,
-        name: firstName,
-        last_name: lastName,
-        national_code: nationalCode,
-        email: emailAddress,
-        password: passwordd,
-        code: codeNumber,
-        date_birth: britDate,
-      });
-      console.log('Signup response:', response);
-      navigate('/');
-    } catch (error) {
-      console.error('Error signing up:', error);
-      toast.error('خطا در ثبت نام', error.message);
-    }
-  };
-
-  const handelDate = (value) => {
-    const formattedDate = value.format('YYYY-MM-DD');
-    setBritDate(formattedDate);
-  };
   // چک کردن آیدی
   const checkUID = () => {
     const uid = getCookieValue('UID');
     console.log(uid);
   };
-
-  const editNumber = () => {
+// ویرایش شماره موبایل
+  const editPhone = () => {
     setSecondForm(false);
-    setThirdForm(false);
     setfirstForm(true);
   };
 
@@ -150,7 +115,7 @@ export default function LoginView() {
 
   const renderForm = (
     <>
-      {firstForm && !secondForm && !thirdForm && (
+      {firstForm && !secondForm && (
         <>
           <Stack spacing={3}>
             <TextField
@@ -184,7 +149,7 @@ export default function LoginView() {
               size="large"
               type="submit"
               variant="contained"
-              color="inherit"
+              className='bg-[#3a84cd]'
               onClick={handleClick}
             >
               تایید
@@ -202,7 +167,8 @@ export default function LoginView() {
           </div>
         </>
       )}
-      {secondForm && !thirdForm && (
+      {/* فرم دوم برای وارد کردن کد تائید */}
+      {secondForm && (
         <>
           <Stack spacing={3}>
             <TextField value={mobileNumber} disabled name="mobileNumber" />
@@ -219,20 +185,20 @@ export default function LoginView() {
               size="large"
               type="submit"
               variant="contained"
-              className='bg-[#1973cf]'
-              onClick={loginClick}
+              className='bg-[#3a84cd]'
+              onClick={editPhone}
             >
-              ورود
+              ویرایش شماره
             </LoadingButton>
             <LoadingButton
               fullWidth
               size="large"
               type="submit"
               variant="contained"
-              className='bg-[#3a84cd]'
-              onClick={editNumber}
+              className='bg-[#1973cf]'
+              onClick={loginClick}
             >
-              ویرایش شماره
+              ورود
             </LoadingButton>
           </div>
         </>
@@ -258,7 +224,7 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          {firstForm && !secondForm && !thirdForm && (
+          {firstForm && !secondForm && (
             <>
               <Typography variant="h3"> ورود</Typography>
               <Divider sx={{ my: 3 }}>
@@ -268,7 +234,7 @@ export default function LoginView() {
               </Divider>
             </>
           )}
-          {secondForm && !thirdForm && (
+          {secondForm &&  (
             <>
               <Typography variant="h3"> تایید شماره تلفن</Typography>
               <Divider sx={{ my: 3 }}>
