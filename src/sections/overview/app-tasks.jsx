@@ -9,18 +9,16 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
+import {  CardHeader } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
-import { Chip, Avatar, Divider, CardHeader } from '@mui/material';
 
 import { getCookieValue } from 'src/utils/cookie';
 
@@ -28,6 +26,8 @@ import { getCookieValue } from 'src/utils/cookie';
 import { Onrun } from 'src/api/onRun';
 
 import Iconify from 'src/components/iconify';
+
+import DetailVisit from './app-propview';
 
 // ----------------------------------------------------------------------
 
@@ -87,10 +87,7 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
     setViewModalOpen(true); // باز کردن مودال مشاهده
   };
 
-  // تابع برای مسیریابی به صفحه رزرو مشاور
-  const handleConsultant = () => {
-    navigate('/ConsultantReservation', { replace: true });
-  };
+ 
 
   return (
     <Card
@@ -198,17 +195,6 @@ export default function AnalyticsTasks({ title, subheader, ...other }) {
         </Table>
       </TableContainer>
 
-      <DeleteConfirmationModal
-        open={confirmDeleteOpen}
-        onClose={() => setConfirmDeleteOpen(false)}
-        onConfirm={handleConfirmDelete}
-      />
-
-      <ViewModal
-        open={viewModalOpen}
-        onClose={() => setViewModalOpen(false)}
-        task={list.find((item) => item.id === selectedTask)}
-      />
 
      
     </Card>
@@ -224,9 +210,8 @@ AnalyticsTasks.propTypes = {
 
 // کامپوننت TaskItem برای نمایش یک ردیف از تسک‌ها
 function TaskItem({ task, list, onView }) {
+  const [open, setOpen] = useState(false);
   const isComplating = list.status === 'complating';
-  console.log(list, list);
-  console.log(task, task);
 
   const [openMenu, setOpenMenu] = useState(null); // حالت برای باز یا بسته بودن منوی پاپ‌اور
 
@@ -253,7 +238,7 @@ function TaskItem({ task, list, onView }) {
       }}
     >
       <React.Fragment key={task.id}>
-        <TableCell>{task.consultant}</TableCell>
+        <TableCell>{task.customer}</TableCell>
         <TableCell>{task.kind}</TableCell>
         <TableCell style={{ display: 'flex', marginRight: '20px', alignItems: 'center' }}>
           {task.status ? (
@@ -277,10 +262,15 @@ function TaskItem({ task, list, onView }) {
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <MenuItem onClick={() => onView(list.id)}>
+          <MenuItem onClick={() => setOpen(true) } >
             <Iconify icon="gravity-ui:chevrons-expand-up-right" sx={{ mr: 2 }} />
             مشاهده
           </MenuItem>
+          <DetailVisit
+            open={open}
+            onClose={() => setOpen(false)}
+            id={task.id}
+          />
          
         </Popover>
       </TableCell>
@@ -288,125 +278,3 @@ function TaskItem({ task, list, onView }) {
   );
 }
 
-function DeleteConfirmationModal({ open, onClose, onConfirm }) {
-  return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          backgroundColor: '#F8F9FA',
-          boxShadow: 24,
-          p: 5,
-          borderRadius: 2,
-          border: '8px double #495057',
-          textAlign: 'center',
-        }}
-      >
-        <Typography variant="h6" sx={{ mb: 5, color: '#495057' }}>
-          از لغو مشاوره خود اطمینان دارید؟
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button
-            onClick={onConfirm}
-            variant="contained"
-            sx={{ mr: 2, bgcolor: '#E03131', color: '#FFFFFF' }}
-          >
-            بله
-          </Button>
-          <Button
-            onClick={onClose}
-            variant="contained"
-            sx={{ bgcolor: '#66A80F', color: '#FFFFFF' }}
-          >
-            خیر
-          </Button>
-        </Box>
-      </Box>
-    </Modal>
-  );
-}
-
-function ViewModal({ open, onClose, task }) {
-  const [starValue, setStarValue] = useState([]);
-
-  if (!task) return null;
-
-  return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 600,
-          maxWidth: '90%',
-          backgroundColor: '#FFFFFF',
-          boxShadow: 24,
-          borderRadius: 4,
-          textAlign: 'center',
-          p: 4,
-          border: '2px solid #E0E0E0',
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            mb: 3,
-            color: '#42a5f5',
-            fontWeight: 'bold',
-            backgroundColor: '#e3f2fd',
-            py: 1,
-            borderRadius: 2,
-          }}
-        >
-          جزئیات مشاوره
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
-          <Avatar
-            src={`${Onrun}/${task.consultant_photo}`}
-            alt="مشاور"
-            sx={{ width: 100, height: 100, mr: 2 }}
-          />
-          <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '18px' }}>
-            {task.consultant}{' '}
-          </Typography>
-        </Box>
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          نوع مشاوره: {task.kind}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          تاریخ  {task.date}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2 }}>
-           ساعت مشاوره: {task.time}
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Chip
-              icon={task.status === 'done' ? <Iconify icon="gravity-ui:circle-check-fill" /> : <Iconify icon="mdi:perimeter" />}
-              label={task.status === 'done' ? 'تکمیل شد' : 'درحال اجرا'}
-              color={task.status === 'done' ? "info" : "success"}
-              sx={{ fontSize: '14px', bgcolor: '#D7ECD9', color: '#4CAF50' }}
-            />
-        </Box>
-        {task.status === 'completing' && (
-          <Box>
-            <Divider sx={{ mb: 2, mt: 2 }} />
-              <Button
-                variant="contained"
-                onClick={onClose}
-                sx={{ bgcolor: '#1976D2', color: '#FFFFFF', px: 4 }}
-              >
-                بستن
-              </Button>
-  
-          </Box>
-        )}
-      </Box>
-    </Modal>
-  );
-}

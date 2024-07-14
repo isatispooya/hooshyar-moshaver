@@ -3,20 +3,19 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-// استفاده از تقویم جلالی
 import { Calendar } from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
+import { Divider } from '@mui/material';
+
 import { getCookieValue } from 'src/utils/cookie';
 
-// request 'http://192.168.62.106:8000'
 import { Onrun } from 'src/api/onRun';
 
 import Iconify from 'src/components/iconify';
 
-// ست کردن تاریخ و ساعت و وضعیت ساعت مشاوره
 export default function CalendarTime() {
     const [selectedDates, setSelectedDates] = useState(new Date());
     const [submissionStatus, setSubmissionStatus] = useState('');
@@ -32,14 +31,13 @@ export default function CalendarTime() {
         setSelectedDates(dates);
     };
     const token = getCookieValue('UID');
-// ارسال زمان ست شده توسط مشاوره به بک اند
+
     const fetchTime = async () => {
         try {
             const response = await axios.post(
                 `${Onrun}/api/settime/consultant/`,
                 { date: selectedDates },
                 { headers: { Authorization: `Bearer ${token}` } }
-
             );
             setSelectedDates(response.data);
             setSubmissionStatus('ارسال شد!');
@@ -52,9 +50,8 @@ export default function CalendarTime() {
             }
         }
     };
-// دریافت زمان ست شده توسط مشاوره از بک اند
-    const getTime = async () => {
 
+    const getTime = async () => {
         axios.get(`${Onrun}/api/selecttime/consultant/`, { headers: { Authorization: `Bearer ${token}` }, })
             .then(response => {
                 setTimeData(response.data);
@@ -65,26 +62,20 @@ export default function CalendarTime() {
             })
     };
     useEffect(getTime, []);
-// دکمه حذف ساعت مشاوره 
+
     const deletTime = async (date, time) => {
         console.log(date, time);
-
         axios.delete(`${Onrun}/api/delete/settime/?date=${date}&time=${time} `, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(response => {
                 getTime()
                 console.log(response.data);
-
             })
             .catch(error => {
                 console.log(error);
             })
     };
-
-
-
-
 
     return (
         <div className='md:flex md:flex-col grid grid-row-1 justify-center items-center md:mt-4'>
@@ -107,34 +98,37 @@ export default function CalendarTime() {
                     </div>
                 </div>
                 <div className='flex space-y-80'>
-                    <div className='flex  flex-col  mb-2 h-[570px] overflow-y-scroll justify-evenly items-center md:mt-0 mt-8 w-72 md:w-96 rounded-lg shadow-md shadow-[#6390ba] bg-white'>
-                        <div className='  flex text-xl font-bold items-center text-[#49a8f5] justify-center bg-[#e3f2fd] p-2 rounded-2xl m-2 md:w-80 w-60 sticky top-4'>
+                    <div className='flex flex-col mb-2 h-[570px] overflow-y-scroll justify-evenly items-center md:mt-0 mt-8 w-72 md:w-96 rounded-lg shadow-md shadow-[#6390ba] bg-white'>
+                        <div className='flex text-xl font-bold items-center text-[#49a8f5] justify-center bg-[#e3f2fd] p-2 rounded-2xl m-2 md:w-80 w-60 sticky top-4'>
                             برنامه کاری
                         </div>
-                        <div className=' h-[500px]'>
+                        <div className='h-[500px] w-full'>
                             {timeData.length > 0 && timeData.map((item, i) => (
-                                item.time.map((jitem, index) => (
-                                    <div
-                                        key={jitem.time}
-                                        className='flex border-[1px] mb-2 p-1 items-center rounded-md w-40'
-                                    >
-                                        <div className='flex gap-2'>
-                                            <p>{item.jalali}</p>
-                                            <div className="border-l h-auto border-gray-400" />
-                                            <p>{jitem.time}</p>
-                                        </div>
-                                        {jitem.reserve ? (
-                                            <Iconify className='text-[#1e89e5] ml-2' icon="material-symbols:check-box-outline-rounded" width="2rem" height="2rem" />
-                                        ) : (
-                                            <Iconify onClick={() => deletTime(item.date, jitem.time)} className='text-red-700 ml-2' icon="material-symbols:cancel-presentation-outline" width="2rem" height="2rem" />
-                                        )}
+                                <div key={item.date}>
+                                    <div className='flex border-gray-200 p-2 items-center justify-center'>
+                                        <p>{item.jalali}</p>
                                     </div>
-                                ))
+                                    <div className='flex flex-wrap justify-center'>
+                                        {item.time.map((jitem, index) => (
+                                            <div
+                                                key={jitem.time}
+                                                className='flex items-center border-[1px] mb-2 p-1 rounded-md w-16 m-1'
+                                            >
+                                                <p>{jitem.time}</p>
+                                                {jitem.reserve ? (
+                                                    <Iconify className='text-[#1e89e5] ml-2' icon="material-symbols:check-box-outline-rounded" width="2rem" height="2rem" />
+                                                ) : (
+                                                    <Iconify onClick={() => deletTime(item.date, jitem.time)} className='text-red-700 ml-2 cursor-pointer' icon="material-symbols:cancel-presentation-outline" width="2rem" height="2rem" />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <Divider sx={{ width: '360px' }} />
+                                </div>
                             ))}
                         </div>
                     </div>
-               </div>
-
+                </div>
             </div>
             <div className='flex justify-between w-full max-w-5xl mt-4'>
                 <button
